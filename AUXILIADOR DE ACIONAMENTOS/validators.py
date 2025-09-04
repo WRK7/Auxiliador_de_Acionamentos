@@ -200,6 +200,31 @@ class Validator:
         return texto
     
     @staticmethod
+    def formatar_porcentagem(texto):
+        """Formata porcentagem"""
+        # Remove caracteres não numéricos
+        numeros = re.sub(r'[^0-9]', '', texto)
+        
+        if numeros:
+            # Adiciona o símbolo de porcentagem
+            return f"{numeros}%"
+        
+        return texto
+    
+    @staticmethod
+    def formatar_parcela(texto):
+        """Formata valor de parcela com X no final"""
+        # Remove caracteres não numéricos
+        numeros = re.sub(r'[^0-9]', '', texto)
+        
+        if numeros:
+            # Converte para float e formata como moeda + X
+            valor = float(numeros) / 100  # Assume que os últimos 2 dígitos são centavos
+            return f"R$ {valor:,.2f}X".replace(',', 'X').replace('.', ',').replace('X', '.')
+        
+        return texto
+    
+    @staticmethod
     def validar_campos_obrigatorios(campos, valores):
         """Valida se campos obrigatórios foram preenchidos"""
         campos_obrigatorios = ["Nome do Devedor", "CPF/CNPJ", "Data de Vencimento", "Valor da Dívida"]

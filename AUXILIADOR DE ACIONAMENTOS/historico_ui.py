@@ -4,12 +4,22 @@ from tkinter import ttk, messagebox
 from datetime import datetime, timedelta
 from historico import HistoricoManager
 
+# Variável global para controlar se a janela já está aberta
+janela_historico_aberta = None
+
 class HistoricoUI:
     """Interface para visualizar e gerenciar o histórico"""
     
-    def __init__(self, parent, callback_duplicar=None):
+    def __init__(self, parent):
+        global janela_historico_aberta
+        
+        # Se já existe uma janela aberta, apenas focar nela
+        if janela_historico_aberta and janela_historico_aberta.winfo_exists():
+            janela_historico_aberta.lift()
+            janela_historico_aberta.focus_force()
+            return
+        
         self.parent = parent
-        self.callback_duplicar = callback_duplicar
         self.historico_manager = HistoricoManager()
         
         # Cores do tema escuro
@@ -34,12 +44,25 @@ class HistoricoUI:
     
     def criar_interface(self):
         """Cria a interface do histórico"""
+        global janela_historico_aberta
+        
         # Janela principal
         self.janela = tk.Toplevel(self.parent)
         self.janela.title("Histórico de Acionamentos")
         self.janela.geometry("1000x700")
         self.janela.configure(bg=self.colors['bg_primary'])
         self.janela.resizable(True, True)
+        
+        # Definir como janela global ativa
+        janela_historico_aberta = self.janela
+        
+        # Handler para quando a janela for fechada
+        def ao_fechar():
+            global janela_historico_aberta
+            janela_historico_aberta = None
+            self.janela.destroy()
+        
+        self.janela.protocol("WM_DELETE_WINDOW", ao_fechar)
         
         # Header
         header_frame = tk.Frame(self.janela, bg=self.colors['bg_secondary'], height=60)
@@ -118,6 +141,16 @@ class HistoricoUI:
         self.combo_periodo.set("Últimos 30 dias")
         self.combo_periodo.bind('<<ComboboxSelected>>', self.aplicar_filtros)
         
+        # Filtro por valor mínimo
+        tk.Label(linha2, text="Valor min:", font=('Segoe UI', 10), 
+                bg=self.colors['bg_secondary'], fg=self.colors['text_primary']).pack(side='left', padx=(20, 0))
+        
+        self.entry_valor_min = tk.Entry(linha2, font=('Segoe UI', 10), width=10,
+                                       bg=self.colors['surface'], fg=self.colors['text_primary'],
+                                       relief='flat', bd=1)
+        self.entry_valor_min.pack(side='left', padx=(10, 5))
+        self.entry_valor_min.bind('<KeyRelease>', self.aplicar_filtros)
+        
         # Botões de ação
         tk.Button(linha2, text="🔄 Atualizar", command=self.carregar_dados,
                  bg=self.colors['accent'], fg=self.colors['text_primary'],
@@ -181,13 +214,14 @@ class HistoricoUI:
                  font=('Segoe UI', 10), relief='flat', bd=0, cursor='hand2',
                  padx=20, pady=8).pack(side='left', padx=(0, 10))
         
-        tk.Button(botoes_frame, text="📋 Duplicar", command=self.duplicar_acionamento,
-                 bg=self.colors['success'], fg=self.colors['text_primary'],
-                 font=('Segoe UI', 10), relief='flat', bd=0, cursor='hand2',
-                 padx=20, pady=8).pack(side='left', padx=(0, 10))
         
         tk.Button(botoes_frame, text="🗑️ Excluir", command=self.excluir_acionamento,
                  bg=self.colors['danger'], fg=self.colors['text_primary'],
+                 font=('Segoe UI', 10), relief='flat', bd=0, cursor='hand2',
+                 padx=20, pady=8).pack(side='left', padx=(0, 10))
+        
+        tk.Button(botoes_frame, text="💾 Backup", command=self.fazer_backup,
+                 bg=self.colors['success'], fg=self.colors['text_primary'],
                  font=('Segoe UI', 10), relief='flat', bd=0, cursor='hand2',
                  padx=20, pady=8).pack(side='left', padx=(0, 10))
         
@@ -235,6 +269,10 @@ class HistoricoUI:
         
         if self.combo_tipo.get() and self.combo_tipo.get() != "Todos":
             filtros['tipo'] = self.combo_tipo.get()
+        
+        # Filtro por valor mínimo
+        if self.entry_valor_min.get().strip():
+            filtros['valor_minimo'] = self.entry_valor_min.get().strip()
         
         # Filtro por período
         periodo = self.combo_periodo.get()
@@ -337,25 +375,6 @@ Computador: {acionamento['computador']}
         texto.insert('1.0', conteudo)
         texto.config(state='disabled')
     
-    def duplicar_acionamento(self):
-        """Duplica o acionamento selecionado"""
-        selecionado = self.tree.selection()
-        if not selecionado:
-            messagebox.showwarning("Aviso", "Selecione um acionamento para duplicar.")
-            return
-        
-        item = self.tree.item(selecionado[0])
-        id_acionamento = item['tags'][0]
-        
-        # Duplicar acionamento
-        dados_duplicados = self.historico_manager.duplicar_acionamento(id_acionamento)
-        
-        if dados_duplicados and self.callback_duplicar:
-            self.callback_duplicar(dados_duplicados)
-            self.janela.destroy()
-        else:
-            messagebox.showerror("Erro", "Não foi possível duplicar o acionamento.")
-    
     def excluir_acionamento(self):
         """Exclui o acionamento selecionado"""
         selecionado = self.tree.selection()
@@ -366,12 +385,97 @@ Computador: {acionamento['computador']}
         item = self.tree.item(selecionado[0])
         id_acionamento = item['tags'][0]
         
-        if messagebox.askyesno("Confirmar", f"Deseja excluir o acionamento {id_acionamento}?"):
+        # Usar janela de confirmação customizada para evitar minimização
+        if self.confirmar_exclusao(id_acionamento):
             if self.historico_manager.excluir_acionamento(id_acionamento):
-                messagebox.showinfo("Sucesso", "Acionamento excluído com sucesso.")
+                # Atualizar dados sem mostrar popup que pode minimizar a janela
                 self.carregar_dados()
+                # Mostrar feedback visual na própria interface
+                self.mostrar_feedback_exclusao()
             else:
                 messagebox.showerror("Erro", "Não foi possível excluir o acionamento.")
+    
+    def confirmar_exclusao(self, id_acionamento):
+        """Janela de confirmação customizada que não minimiza a janela principal"""
+        # Criar janela de confirmação
+        confirm_window = tk.Toplevel(self.janela)
+        confirm_window.title("Confirmar Exclusão")
+        confirm_window.geometry("350x150")
+        confirm_window.configure(bg=self.colors['bg_secondary'])
+        confirm_window.resizable(False, False)
+        
+        # Centralizar na tela
+        confirm_window.transient(self.janela)
+        confirm_window.grab_set()
+        
+        # Frame principal
+        main_frame = tk.Frame(confirm_window, bg=self.colors['bg_secondary'])
+        main_frame.pack(expand=True, fill='both', padx=20, pady=20)
+        
+        # Pergunta
+        pergunta = tk.Label(main_frame, 
+                           text=f"Deseja excluir o acionamento {id_acionamento}?",
+                           font=('Segoe UI', 11),
+                           bg=self.colors['bg_secondary'],
+                           fg=self.colors['text_primary'])
+        pergunta.pack(pady=(0, 20))
+        
+        # Frame dos botões
+        botoes_frame = tk.Frame(main_frame, bg=self.colors['bg_secondary'])
+        botoes_frame.pack()
+        
+        resultado = {'confirmado': False}
+        
+        def confirmar():
+            resultado['confirmado'] = True
+            confirm_window.destroy()
+        
+        def cancelar():
+            resultado['confirmado'] = False
+            confirm_window.destroy()
+        
+        # Botões
+        tk.Button(botoes_frame, text="Sim", command=confirmar,
+                 bg=self.colors['danger'], fg='white',
+                 font=('Segoe UI', 10, 'bold'),
+                 relief='flat', bd=0, cursor='hand2',
+                 padx=20, pady=8).pack(side='left', padx=(0, 10))
+        
+        tk.Button(botoes_frame, text="Não", command=cancelar,
+                 bg=self.colors['accent'], fg=self.colors['text_primary'],
+                 font=('Segoe UI', 10, 'bold'),
+                 relief='flat', bd=0, cursor='hand2',
+                 padx=20, pady=8).pack(side='left')
+        
+        # Focar na janela de confirmação
+        confirm_window.focus_force()
+        
+        # Aguardar resultado
+        self.janela.wait_window(confirm_window)
+        
+        return resultado['confirmado']
+    
+    def mostrar_feedback_exclusao(self):
+        """Mostra feedback visual de exclusão sem minimizar a janela"""
+        # Criar um label temporário para mostrar sucesso
+        feedback_label = tk.Label(self.janela, text="✅ Acionamento excluído com sucesso!", 
+                                 bg=self.colors['success'], fg='white',
+                                 font=('Segoe UI', 10, 'bold'))
+        feedback_label.place(relx=0.5, rely=0.1, anchor='center')
+        
+        # Remover o feedback após 2 segundos
+        self.janela.after(2000, feedback_label.destroy)
+    
+    def fazer_backup(self):
+        """Faz backup do histórico"""
+        try:
+            sucesso, mensagem = self.historico_manager.fazer_backup()
+            if sucesso:
+                messagebox.showinfo("Sucesso", f"Backup criado com sucesso!\n\n{mensagem}")
+            else:
+                messagebox.showerror("Erro", f"Erro ao criar backup:\n{mensagem}")
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro inesperado ao criar backup:\n{str(e)}")
     
     def exportar_historico(self):
         """Exporta o histórico para arquivo"""

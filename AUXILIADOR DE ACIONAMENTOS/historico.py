@@ -13,9 +13,31 @@ class HistoricoManager:
         self.arquivo_historico = os.path.join(pasta_historico, "acionamentos.json")
         self.arquivo_contador = os.path.join(pasta_historico, "contador.json")
         
-        # Criar pasta se não existir
-        if not os.path.exists(pasta_historico):
-            os.makedirs(pasta_historico)
+        # Criar estrutura de pastas organizadas
+        self.criar_estrutura_pastas()
+    
+    def criar_estrutura_pastas(self):
+        """Cria estrutura de pastas organizadas para o histórico"""
+        # Pasta principal
+        if not os.path.exists(self.pasta_historico):
+            os.makedirs(self.pasta_historico)
+        
+        # Pastas por ano
+        ano_atual = datetime.now().year
+        pasta_ano = os.path.join(self.pasta_historico, str(ano_atual))
+        if not os.path.exists(pasta_ano):
+            os.makedirs(pasta_ano)
+        
+        # Pastas por mês dentro do ano
+        mes_atual = datetime.now().month
+        pasta_mes = os.path.join(pasta_ano, f"{mes_atual:02d}")
+        if not os.path.exists(pasta_mes):
+            os.makedirs(pasta_mes)
+        
+        # Pasta de backups
+        pasta_backup = os.path.join(self.pasta_historico, "backups")
+        if not os.path.exists(pasta_backup):
+            os.makedirs(pasta_backup)
     
     def obter_proximo_id(self, tipo_acionamento):
         """Obtém o próximo ID sequencial para o tipo de acionamento"""
@@ -142,6 +164,19 @@ class HistoricoManager:
                 if texto_busca not in nome_devedor:
                     incluir = False
             
+            # Filtro por valor mínimo
+            if filtros.get('valor_minimo'):
+                try:
+                    valor_minimo = float(filtros['valor_minimo'].replace('R$', '').replace('.', '').replace(',', '.'))
+                    valor_acionamento = acionamento['informacoes'].get('Valor da Dívida', '0')
+                    # Extrair valor numérico do campo de moeda
+                    import re
+                    valor_num = float(re.sub(r'[^\d,.]', '', valor_acionamento).replace(',', '.'))
+                    if valor_num < valor_minimo:
+                        incluir = False
+                except (ValueError, TypeError):
+                    pass  # Ignorar se não conseguir converter
+            
             if incluir:
                 resultado.append(acionamento)
         
@@ -218,3 +253,73 @@ class HistoricoManager:
             return True
         
         return False
+    
+    def fazer_backup(self):
+        """Faz backup do histórico atual"""
+        try:
+            historico = self.carregar_historico()
+            if not historico:
+                return False, "Nenhum dado para fazer backup"
+            
+            # Nome do arquivo de backup com timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            arquivo_backup = os.path.join(self.pasta_historico, "backups", f"backup_{timestamp}.json")
+            
+            # Salvar backup
+            with open(arquivo_backup, 'w', encoding='utf-8') as f:
+                json.dump(historico, f, ensure_ascii=False, indent=2)
+            
+            return True, f"Backup criado: {arquivo_backup}"
+            
+        except Exception as e:
+            return False, f"Erro ao criar backup: {str(e)}"
+    
+    def restaurar_backup(self, arquivo_backup):
+        """Restaura histórico de um backup"""
+        try:
+            if not os.path.exists(arquivo_backup):
+                return False, "Arquivo de backup não encontrado"
+            
+            # Carregar backup
+            with open(arquivo_backup, 'r', encoding='utf-8') as f:
+                historico_backup = json.load(f)
+            
+            # Fazer backup do atual antes de restaurar
+            self.fazer_backup()
+            
+            # Restaurar
+            self.salvar_historico(historico_backup)
+            
+            return True, "Backup restaurado com sucesso"
+            
+        except Exception as e:
+            return False, f"Erro ao restaurar backup: {str(e)}"
+    
+    def obter_lista_backups(self):
+        """Obtém lista de backups disponíveis"""
+        try:
+            pasta_backups = os.path.join(self.pasta_historico, "backups")
+            if not os.path.exists(pasta_backups):
+                return []
+            
+            backups = []
+            for arquivo in os.listdir(pasta_backups):
+                if arquivo.startswith("backup_") and arquivo.endswith(".json"):
+                    caminho_completo = os.path.join(pasta_backups, arquivo)
+                    tamanho = os.path.getsize(caminho_completo)
+                    data_modificacao = os.path.getmtime(caminho_completo)
+                    
+                    backups.append({
+                        'arquivo': arquivo,
+                        'caminho': caminho_completo,
+                        'tamanho': tamanho,
+                        'data': datetime.fromtimestamp(data_modificacao).strftime("%d/%m/%Y %H:%M:%S")
+                    })
+            
+            # Ordenar por data (mais recente primeiro)
+            backups.sort(key=lambda x: x['data'], reverse=True)
+            return backups
+            
+        except Exception as e:
+            print(f"Erro ao obter lista de backups: {e}")
+            return []
