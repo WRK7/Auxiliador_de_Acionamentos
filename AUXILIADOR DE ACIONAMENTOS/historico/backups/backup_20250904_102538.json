@@ -372,6 +372,27 @@
     "ip": "10.100.20.196"
   },
   {
+    "id": "ACD-2025-001",
+    "data_criacao": "04/09/2025 09:21:35",
+    "carteira": "UNIMED",
+    "tipo": "ACD - ACORDO",
+    "informacoes": {
+      "Nome do Devedor": "sa",
+      "CPF/CNPJ": "091.988.201-33",
+      "Valor Total Atualizado": "R$ 0,02",
+      "Desconto": "2",
+      "Valor Proposto": "R$ 0,03",
+      "Data de Vencimento": "09/09/2025",
+      "Forma de Pagamento": "w",
+      "Enviar pelo WhatsApp/E-mail": "e",
+      "Observações": "w"
+    },
+    "modelo_gerado": "=== ACIONAMENTO - ACD - ACORDO ===\nCarteira: UNIMED\nData: 04/09/2025\n\nNome do Devedor: sa\nCPF/CNPJ: 091.988.201-33\nValor Total Atualizado: R$ 0,02\nDesconto: 2\nValor Proposto: R$ 0,03\nData de Vencimento: 09/09/2025\nForma de Pagamento: w\nEnviar pelo WhatsApp/E-mail: e\nObservações: w",
+    "usuario": "wesley.cruz",
+    "computador": "Wender",
+    "ip": "10.100.20.196"
+  },
+  {
     "id": "ACD-2025-002",
     "data_criacao": "04/09/2025 09:22:04",
     "carteira": "UNIMED",
@@ -496,54 +517,6 @@
       "Observações": "s"
     },
     "modelo_gerado": "=== ACIONAMENTO - ACD - PIX/DÉBITO/CRÉDITO ===\nCarteira: FIEB\nData: 04/09/2025\n\nUnidade: a\nNome do Devedor: s\nCPF/CNPJ: 091.988.201-33\nReferência: s\nValor Original: s\nValor Total Atualizado: s\nDesconto: s\nValor Proposto: s\nData de Vencimento: 04/09/2025\nForma de Pagamento: s\nEnviar pelo WhatsApp/E-mail: s\nObservações: s",
-    "usuario": "wesley.cruz",
-    "computador": "PCportesconx",
-    "ip": "10.100.20.196"
-  },
-  {
-    "id": "ACD-2025-008",
-    "data_criacao": "04/09/2025 10:27:37",
-    "carteira": "FIEB",
-    "tipo": "ACD - BOLETO",
-    "informacoes": {
-      "Unidade": "a",
-      "Nome do Devedor": "s",
-      "CPF/CNPJ": "091.988.201-33",
-      "Referência": "s",
-      "Valor Original": "s",
-      "Valor Total Atualizado": "s",
-      "Desconto": "s",
-      "Valor Proposto": "s",
-      "Data de Vencimento": "04/09/2025",
-      "Forma de Pagamento": "s",
-      "Enviar pelo WhatsApp/E-mail": "s",
-      "Observações": "s",
-      "Entrada (Boleto)": "",
-      "Qtd de Parcelas": "",
-      "Valor de Cada Parcela": ""
-    },
-    "modelo_gerado": "=== ACIONAMENTO - ACD - BOLETO ===\nCarteira: FIEB\nData: 04/09/2025\n\nUnidade: a\nNome do Devedor: s\nCPF/CNPJ: 091.988.201-33\nReferência: s\nValor Original: s\nValor Total Atualizado: s\nDesconto: s\nValor Proposto: s\nData de Vencimento: 04/09/2025\nForma de Pagamento: s\nEnviar pelo WhatsApp/E-mail: s\nObservações: s",
-    "usuario": "wesley.cruz",
-    "computador": "PCportesconx",
-    "ip": "10.100.20.196"
-  },
-  {
-    "id": "ACD-2025-009",
-    "data_criacao": "05/09/2025 10:07:31",
-    "carteira": "SENAC RJ",
-    "tipo": "ACD - ACORDO",
-    "informacoes": {
-      "Nome do Devedor": "Wesley",
-      "CPF/CNPJ": "091.988.201-33",
-      "Valor Total Atualizado": "R$ 0,23",
-      "Desconto": "1",
-      "Valor Proposto": "R$ 2,33",
-      "Data de Vencimento": "05/09/2025",
-      "Forma de Pagamento": "BOLETO",
-      "Enviar pelo WhatsApp/E-mail": "6782323",
-      "Observações": "NENHUMA"
-    },
-    "modelo_gerado": "=== ACIONAMENTO - ACD - ACORDO ===\nCarteira: SENAC RJ\nData: 05/09/2025\n\nNome do Devedor: Wesley\nCPF/CNPJ: 091.988.201-33\nValor Total Atualizado: R$ 0,23\nDesconto: 1\nValor Proposto: R$ 2,33\nData de Vencimento: 05/09/2025\nForma de Pagamento: BOLETO\nEnviar pelo WhatsApp/E-mail: 6782323\nObservações: NENHUMA",
     "usuario": "wesley.cruz",
     "computador": "PCportesconx",
     "ip": "10.100.20.196"
