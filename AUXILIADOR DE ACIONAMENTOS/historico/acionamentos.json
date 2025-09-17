@@ -547,5 +547,30 @@
     "usuario": "wesley.cruz",
     "computador": "PCportesconx",
     "ip": "10.100.20.196"
+  },
+  {
+    "id": "ACF-2025-009",
+    "data_criacao": "10/09/2025 07:51:24",
+    "carteira": "FIRJAN",
+    "tipo": "ACF - PARCELADO",
+    "informacoes": {
+      "Empresa": "as",
+      "Cliente": "aS",
+      "CPF/CNPJ": "091.988.201-33",
+      "Telefone": "SDASD",
+      "E-mail": "ASDASD",
+      "Total da Dívida": "3323",
+      "Acordo Realizado": "23432",
+      "Valor Total Negociado": "DASD",
+      "Nº de Parcelas no Cartão": "ASDAS",
+      "Número e Valores dos Títulos": "ASD",
+      "Data de Vencimento": "17/09/2025",
+      "Enviar pelo WhatsApp/E-mail": "SADAD",
+      "Observações": "ASDASDASD"
+    },
+    "modelo_gerado": "=== ACIONAMENTO - ACF - PARCELADO ===\nCarteira: FIRJAN\nData: 10/09/2025\n\nEmpresa: as\nCliente: aS\nCPF/CNPJ: 091.988.201-33\nTelefone: SDASD\nE-mail: ASDASD\nTotal da Dívida: 3323\nAcordo Realizado: 23432\nValor Total Negociado: DASD\nNº de Parcelas no Cartão: ASDAS\nNúmero e Valores dos Títulos: ASD\nData de Vencimento: 17/09/2025\nEnviar pelo WhatsApp/E-mail: SADAD\nObservações: ASDASDASD",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
   }
 ]

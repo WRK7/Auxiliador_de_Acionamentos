@@ -102,13 +102,25 @@ CAMPOS_INFO = {
 
 # Configurações de validação
 CAMPOS_OBRIGATORIOS = [
-    "Nome do Devedor",
-    "CPF/CNPJ", 
-    "Data de Vencimento",
-    "Valor da Dívida",
-    "Títulos",
-    "Valor Total Atualizado",
-    "Valor Proposto"
+    "Nome do Devedor", "CPF/CNPJ", "Data de Vencimento", "Valor da Dívida", 
+    "Número do Contrato", "Títulos", "Valor Total Atualizado", "Desconto", 
+    "Valor Proposto", "Parcelamento", "Enviar pelo WhatsApp/E-mail", 
+    "CRE/Contrato", "Valor Confirmado", "Horário da Ligação", "Contrato", 
+    "Entrada de", "Quant. P", "Valor das Parcelas", "Empresa", "Cliente", 
+    "Telefone", "E-mail", "Total da Dívida", "Acordo Realizado", 
+    "Valor Total Negociado", "Nº de Parcelas no Cartão", 
+    "Número e Valores dos Títulos", "Unidade", "Referência", "Valor Original", 
+    "Forma de Pagamento", "Contratante", "Faturas a Pagar", "Dias em Atraso", 
+    "Data de Pagamento", "Matrícula", "Gravação (Telefone)", 
+    "Valor Proposto para Parcelamento", "Entrada (Boleto)", "Qtd de Parcelas", 
+    "Valor de Cada Parcela", "Fatura Vencida", "Novo Vencimento", "Email", 
+    "Titular", "Valor Débito Original", "Vencimento das Faturas", 
+    "Vencimento Acordo", "Valor de Entrada", "Quantidade de Parcelas", 
+    "Valor Debito Original", "De Desconto", "Valor Negociado", 
+    "Matrícula para Transferência", "Religação", "Valor da Parcelas", 
+    "Vencimento da Entrada", "Ativo - Religação", "Titulo", "Valor Total", 
+    "Valor Desconto", "Valor da Entrada", "Parcelas", "Valor da Parcela",
+    "Matrícula Inativa", "Valor da Parcelas"
 ]
 
 # Configurações de prazo máximo por carteira (em dias)
@@ -188,6 +200,7 @@ TIPOS_POR_CARTEIRA = {
 FORMATACAO_AUTOMATICA = {
     "CPF/CNPJ": "cpf_cnpj",
     "Data de Vencimento": "data",
+    "Data de Pagamento": "data",
     "Valor da Dívida": "moeda",
     "Valor Total Atualizado": "moeda",
     "Valor Proposto": "moeda",

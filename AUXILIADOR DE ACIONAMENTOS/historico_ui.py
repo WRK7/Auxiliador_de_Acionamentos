@@ -341,36 +341,20 @@ class HistoricoUI:
         self.mostrar_detalhes(acionamento)
     
     def mostrar_detalhes(self, acionamento):
-        """Mostra janela com detalhes do acionamento"""
+        """Mostra janela com detalhes do acionamento - apenas o modelo gerado"""
         detalhes_janela = tk.Toplevel(self.janela)
-        detalhes_janela.title(f"Detalhes - {acionamento['id']}")
+        detalhes_janela.title(f"Modelo - {acionamento['id']}")
         detalhes_janela.geometry("600x500")
         detalhes_janela.configure(bg=self.colors['bg_primary'])
         
-        # Texto com detalhes
+        # Texto com detalhes - apenas o modelo gerado
         texto = tk.Text(detalhes_janela, font=('Consolas', 10),
                        bg=self.colors['surface'], fg=self.colors['text_primary'],
                        relief='flat', bd=1, wrap='word')
         texto.pack(fill='both', expand=True, padx=15, pady=15)
         
-        # Conteúdo
-        conteudo = f"""
-=== DETALHES DO ACIONAMENTO ===
-
-ID: {acionamento['id']}
-Data de Criação: {acionamento['data_criacao']}
-Carteira: {acionamento['carteira']}
-Tipo: {acionamento['tipo']}
-Usuário: {acionamento['usuario']}
-Computador: {acionamento['computador']}
-
-=== INFORMAÇÕES ===
-"""
-        
-        for campo, valor in acionamento['informacoes'].items():
-            conteudo += f"{campo}: {valor}\n"
-        
-        conteudo += f"\n=== MODELO GERADO ===\n{acionamento['modelo_gerado']}"
+        # Mostrar apenas o modelo gerado
+        conteudo = acionamento['modelo_gerado']
         
         texto.insert('1.0', conteudo)
         texto.config(state='disabled')
