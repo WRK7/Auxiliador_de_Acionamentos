@@ -192,8 +192,8 @@ class FieldValidators:
         if not valor.strip():
             return True  # Campo vazio é válido (não obrigatório)
         
-        # Remover formatação e verificar se é um número válido
-        valor_limpo = re.sub(r'[^\d,.]', '', valor)
+        # Remover formatação R$ e espaços
+        valor_limpo = re.sub(r'[R$\s]', '', valor)
         
         if not valor_limpo:
             return False
@@ -202,18 +202,58 @@ class FieldValidators:
         if not re.match(r'^[\d.,]+$', valor_limpo):
             return False
         
-        # Verificar se não tem múltiplas vírgulas ou pontos
-        if valor_limpo.count(',') > 1 or valor_limpo.count('.') > 1:
+        # Validar formato brasileiro: pode ter múltiplos pontos como separadores de milhares
+        # mas apenas uma vírgula como separador decimal
+        if valor_limpo.count(',') > 1:
             return False
         
-        # Verificar se vírgula e ponto não estão juntos
-        if ',.' in valor_limpo or '.,' in valor_limpo:
-            return False
+        # Se tem vírgula, validar formato brasileiro (pontos como separadores de milhares, vírgula como decimal)
+        if ',' in valor_limpo:
+            partes = valor_limpo.split(',')
+            if len(partes) != 2:
+                return False
+            
+            parte_inteira = partes[0]
+            parte_decimal = partes[1]
+            
+            # Parte decimal deve ter no máximo 2 dígitos
+            if len(parte_decimal) > 2 or not parte_decimal.isdigit():
+                return False
+            
+            # Parte inteira pode ter pontos como separadores de milhares
+            parte_sem_pontos = parte_inteira.replace('.', '')
+            if not parte_sem_pontos.isdigit():
+                return False
+            
+            # Validar se os pontos estão nas posições corretas (a cada 3 dígitos da direita)
+            if '.' in parte_inteira:
+                grupos = parte_inteira.split('.')
+                # Primeiro grupo pode ter 1-3 dígitos, demais devem ter exatamente 3
+                if len(grupos[0]) == 0 or len(grupos[0]) > 3:
+                    return False
+                for grupo in grupos[1:]:
+                    if len(grupo) != 3 or not grupo.isdigit():
+                        return False
+        else:
+            # Se não tem vírgula, deve ser apenas números e pontos (separadores de milhares)
+            parte_sem_pontos = valor_limpo.replace('.', '')
+            if not parte_sem_pontos.isdigit():
+                return False
+            
+            # Validar posicionamento dos pontos se existirem
+            if '.' in valor_limpo:
+                grupos = valor_limpo.split('.')
+                if len(grupos[0]) == 0 or len(grupos[0]) > 3:
+                    return False
+                for grupo in grupos[1:]:
+                    if len(grupo) != 3 or not grupo.isdigit():
+                        return False
         
-        # Tentar converter para float
+        # Tentar converter para float para validação final
         try:
-            # Substituir vírgula por ponto para conversão
-            valor_float = float(valor_limpo.replace(',', '.'))
+            # Substituir vírgula por ponto e remover pontos dos milhares para conversão
+            valor_para_conversao = valor_limpo.replace('.', '').replace(',', '.')
+            valor_float = float(valor_para_conversao)
             return valor_float >= 0  # Valores negativos não são permitidos
         except ValueError:
             return False
@@ -224,7 +264,7 @@ class FieldValidators:
             return True, "Campo vazio"
         
         if not self._validar_valor_monetario(valor):
-            return False, "Formato inválido (ex: 1000,00 ou 1000.00)"
+            return False, "Formato inválido (ex: 5000 ou 5.000,50)"
         
         return True, "Valor válido"
     

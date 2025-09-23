@@ -189,13 +189,47 @@ class Validator:
     @staticmethod
     def formatar_moeda(texto):
         """Formata valor monetário"""
-        # Remove caracteres não numéricos
-        numeros = re.sub(r'[^0-9]', '', texto)
+        # Preserva vírgulas e pontos para detectar se já tem centavos
+        texto_limpo = re.sub(r'[^\d,.]', '', texto)
         
+        if not texto_limpo:
+            return texto
+        
+        # Se já tem vírgula ou ponto, assume que o usuário já formatou os centavos
+        if ',' in texto_limpo or '.' in texto_limpo:
+            # Normaliza para formato brasileiro (vírgula como separador decimal)
+            texto_normalizado = texto_limpo.replace('.', ',')
+            
+            # Se tem apenas um separador, trata como separador decimal
+            if texto_normalizado.count(',') == 1:
+                partes = texto_normalizado.split(',')
+                parte_inteira = partes[0]
+                parte_decimal = partes[1][:2]  # Máximo 2 casas decimais
+                
+                # Formatar parte inteira com pontos
+                if len(parte_inteira) > 3:
+                    parte_formatada = ""
+                    for i, digito in enumerate(reversed(parte_inteira)):
+                        if i > 0 and i % 3 == 0:
+                            parte_formatada = "." + parte_formatada
+                        parte_formatada = digito + parte_formatada
+                    parte_inteira = parte_formatada
+                
+                return f"R$ {parte_inteira},{parte_decimal.ljust(2, '0')}"
+        
+        # Se não tem separadores, assume que são apenas reais (sem centavos)
+        numeros = re.sub(r'[^0-9]', '', texto)
         if numeros:
-            # Converte para float e formata
-            valor = float(numeros) / 100  # Assume que os últimos 2 dígitos são centavos
-            return f"R$ {valor:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+            # Formatar com pontos como separador de milhares
+            if len(numeros) > 3:
+                parte_formatada = ""
+                for i, digito in enumerate(reversed(numeros)):
+                    if i > 0 and i % 3 == 0:
+                        parte_formatada = "." + parte_formatada
+                    parte_formatada = digito + parte_formatada
+                return f"R$ {parte_formatada},00"
+            else:
+                return f"R$ {numeros},00"
         
         return texto
     
@@ -227,13 +261,12 @@ class Validator:
     @staticmethod
     def formatar_parcela(texto):
         """Formata valor de parcela com X no final"""
-        # Remove caracteres não numéricos
-        numeros = re.sub(r'[^0-9]', '', texto)
+        # Usar a mesma lógica da formatação de moeda
+        texto_formatado = Validator.formatar_moeda(texto)
         
-        if numeros:
-            # Converte para float e formata como moeda + X
-            valor = float(numeros) / 100  # Assume que os últimos 2 dígitos são centavos
-            return f"R$ {valor:,.2f}X".replace(',', 'X').replace('.', ',').replace('X', '.')
+        # Se foi formatado com sucesso, adicionar X no final
+        if texto_formatado.startswith("R$ "):
+            return texto_formatado + "X"
         
         return texto
     
