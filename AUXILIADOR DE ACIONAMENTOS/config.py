@@ -24,89 +24,103 @@ TIPOS_ACIONAMENTO = [
     "ACP - PARCELADO"
 ]
 
-# Campos de informação padrão
+# Campos de informação padrão - Organizados por categoria
 CAMPOS_INFO = {
+    # === INFORMAÇÕES BÁSICAS DO DEVEDOR ===
     "Nome do Devedor": "",
     "CPF/CNPJ": "",
-    "Data de Vencimento": "",
-    "Valor da Dívida": "",
-    "Número do Contrato": "",
-    "Títulos": "",
-    "Valor Total Atualizado": "",
-    "Desconto": "",
-    "Valor Proposto": "",
-    "Parcelamento": "",
-    "Enviar pelo WhatsApp/E-mail": "",
-    "Observações": "",
-    "CRE/Contrato": "",
-    "Valor Confirmado": "",
-    "Horário da Ligação": "",
-    "Contrato": "",
-    "Entrada de": "",
-    "Quant. P": "",
-    "Valor das Parcelas": "",
+    "Titular": "",
     "Empresa": "",
     "Cliente": "",
+    "Contratante": "",
+    
+    # === INFORMAÇÕES DE CONTATO ===
     "Telefone": "",
     "E-mail": "",
-    "Total da Dívida": "",
-    "Acordo Realizado": "",
+    "WhatsApp": "",
+    "Email": "",
+    
+    # === INFORMAÇÕES DE VALORES ===
+    "Valor da Dívida": "",
+    "Valor Total Atualizado": "",
+    "Valor Proposto": "",
+    "Valor Confirmado": "",
     "Valor Total Negociado": "",
+    "Valor Original": "",
+    "Valor Débito Original": "",
+    "Valor Debito Original": "",
+    "Valor Negociado": "",
+    "Valor Total": "",
+    "Total da Dívida": "",
+    
+    # === INFORMAÇÕES DE DESCONTO ===
+    "Desconto Principal": "",
+    "Desconto Juros": "",
+    "Desconto Multa": "",
+    
+    # === INFORMAÇÕES DE PARCELAMENTO ===
+    "Parcelamento": "",
+    "Valor das Parcelas": "",
+    "Valor de Cada Parcela": "",
+    "Valor da Parcela": "",
+    "Valor da Parcelas": "",
+    "Parcelas": "",
+    "Quantidade de Parcelas": "",
+    "Qtd de Parcelas": "",
+    "Quantidade de Parcelas": "",
     "Nº de Parcelas no Cartão": "",
+    
+    # === INFORMAÇÕES DE ENTRADA ===
+    "Entrada de": "",
+    "Valor de Entrada": "",
+    "Entrada (Boleto)": "",
+    "Entrada Negociação": "",
+    
+    # === INFORMAÇÕES DE CONTRATOS E TÍTULOS ===
+    "Número do Contrato": "",
+    "CRE/Contrato": "",
+    "Contrato": "",
+    "Títulos": "",
+    "Titulo": "",
     "Número e Valores dos Títulos": "",
+    "Faturas a Pagar": "",
+    "Fatura Vencida": "",
+    
+    # === INFORMAÇÕES DE MATRÍCULA E UNIDADE ===
+    "Matrícula": "",
+    "Matrícula Inativa": "",
+    "Matrícula para Transferência": "",
     "Unidade": "",
     "Referência": "",
-    "Valor Original": "",
-    "Forma de Pagamento": "",
-    "Contratante": "",
-    "Faturas a Pagar": "",
-    "Dias em Atraso": "",
+    
+    # === INFORMAÇÕES DE VENCIMENTO ===
+    "Data de Vencimento": "",
     "Data de Pagamento": "",
-    "Matrícula": "",
-    "Gravação (Telefone)": "",
-    "Valor Proposto para Parcelamento": "",
-    "Entrada (Boleto)": "",
-    "Qtd de Parcelas": "",
-    "Valor de Cada Parcela": "",
-    "Fatura Vencida": "",
-    "Novo Vencimento": "",
-    "Email": "",
-    "Unidade": "",
-    "Titular": "",
-    "Valor Débito Original": "",
     "Vencimento das Faturas": "",
     "Vencimento Acordo": "",
-    "Valor de Entrada": "",
-    "Quantidade de Parcelas": "",
-    "Valor de Cada Parcela": "",
-    "Valor Total Atualizado": "",
-    "Valor Debito Original": "",
-    "Matrícula Inativa": "",
-    "Valor Original": "",
-    "De Desconto": "",
-    "Valor Negociado": "",
-    "Matrícula para Transferência": "",
-    "Religação": "",
-    "Entrada Negociação": "",
-    "Valor da Parcelas": "",
     "Vencimento da Entrada": "",
+    "Novo Vencimento": "",
+    
+    # === INFORMAÇÕES DE PAGAMENTO ===
+    "Forma de Pagamento": "",
+    "Acordo Realizado": "",
+    "Dias em Atraso": "",
+    "Horário da Ligação": "",
+    "Gravação (Telefone)": "",
+    
+    # === INFORMAÇÕES ESPECÍFICAS ===
+    "Valor Proposto para Parcelamento": "",
+    "Religação": "",
     "Ativo - Religação": "",
-    "Titulo": "",
-    "Valor Total": "",
-    "Valor Desconto": "",
-    "Valor da Entrada": "",
-    "Valor de Cada Parcela": "",
-    "Parcelas": "",
-    "Valor da Parcela": ""
+    "Observações": ""
 }
 
 # Configurações de validação
 CAMPOS_OBRIGATORIOS = [
     "Nome do Devedor", "CPF/CNPJ", "Data de Vencimento", "Valor da Dívida", 
-    "Número do Contrato", "Títulos", "Valor Total Atualizado", "Desconto", 
-    "Valor Proposto", "Parcelamento", "Enviar pelo WhatsApp/E-mail", 
+    "Número do Contrato", "Títulos", "Valor Total Atualizado", "Valor Proposto", "Parcelamento", "WhatsApp", "E-mail", 
     "CRE/Contrato", "Valor Confirmado", "Horário da Ligação", "Contrato", 
-    "Entrada de", "Quant. P", "Valor das Parcelas", "Empresa", "Cliente", 
+    "Entrada de", "Quantidade de Parcelas", "Valor das Parcelas", "Empresa", "Cliente", 
     "Telefone", "E-mail", "Total da Dívida", "Acordo Realizado", 
     "Valor Total Negociado", "Nº de Parcelas no Cartão", 
     "Número e Valores dos Títulos", "Unidade", "Referência", "Valor Original", 
@@ -116,10 +130,10 @@ CAMPOS_OBRIGATORIOS = [
     "Valor de Cada Parcela", "Fatura Vencida", "Novo Vencimento", "Email", 
     "Titular", "Valor Débito Original", "Vencimento das Faturas", 
     "Vencimento Acordo", "Valor de Entrada", "Quantidade de Parcelas", 
-    "Valor Debito Original", "De Desconto", "Valor Negociado", 
+    "Valor Debito Original", "Valor Negociado", 
     "Matrícula para Transferência", "Religação", "Valor da Parcelas", 
     "Vencimento da Entrada", "Ativo - Religação", "Titulo", "Valor Total", 
-    "Valor Desconto", "Valor da Entrada", "Parcelas", "Valor da Parcela",
+    "Valor da Entrada", "Parcelas", "Valor da Parcela",
     "Matrícula Inativa", "Valor da Parcelas"
 ]
 
@@ -209,6 +223,9 @@ FORMATACAO_AUTOMATICA = {
     "Valor das Parcelas": "parcela",
     "Valor da Parcela": "parcela",
     "Valor de Cada Parcela": "parcela",
+    "Desconto Principal": "porcentagem",
+    "Desconto Juros": "porcentagem",
+    "Desconto Multa": "porcentagem",
 }
 
 # Campos específicos por tipo de acionamento
@@ -218,10 +235,13 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "Títulos",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACP - PARCELADO": [
@@ -229,11 +249,14 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "Títulos",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Parcelamento",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACD - À VISTA": [
@@ -241,12 +264,15 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "CRE/Contrato",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
         "Valor Confirmado",
         "Horário da Ligação",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACD - PARCELADO": [
@@ -254,13 +280,16 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "CRE/Contrato",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Parcelamento",
         "Data de Vencimento",
         "Valor Confirmado",
         "Horário da Ligação",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "SESC - À VISTA": [
@@ -268,10 +297,13 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "Contrato",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "SESC - PARCELADO": [
@@ -279,13 +311,16 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "Contrato",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Entrada de",
-        "Quant. P",
+        "Quantidade de Parcelas",
         "Valor das Parcelas",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACF - À VISTA": [
@@ -300,7 +335,8 @@ CAMPOS_POR_TIPO = {
         "Nº de Parcelas no Cartão",
         "Número e Valores dos Títulos",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACF - PARCELADO": [
@@ -315,7 +351,8 @@ CAMPOS_POR_TIPO = {
         "Nº de Parcelas no Cartão",
         "Número e Valores dos Títulos",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACD - PIX/DÉBITO/CRÉDITO": [
@@ -325,11 +362,14 @@ CAMPOS_POR_TIPO = {
         "Referência",
         "Valor Original",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
         "Forma de Pagamento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACD - BOLETO": [
@@ -339,14 +379,17 @@ CAMPOS_POR_TIPO = {
         "Referência",
         "Valor Original",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Entrada (Boleto)",
         "Qtd de Parcelas",
         "Valor de Cada Parcela",
         "Data de Vencimento",
         "Forma de Pagamento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACD - ACORDO": [
@@ -366,11 +409,14 @@ CAMPOS_POR_TIPO = {
         "Gravação (Telefone)",
         "Valor Original",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
         "Forma de Pagamento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACP - PARCELADO": [
@@ -378,14 +424,17 @@ CAMPOS_POR_TIPO = {
         "Gravação (Telefone)",
         "Valor Original",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto para Parcelamento",
         "Entrada (Boleto)",
         "Qtd de Parcelas",
         "Valor de Cada Parcela",
         "Data de Vencimento",
         "Forma de Pagamento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "VIA - SEGUNDA VIA": [
@@ -404,11 +453,14 @@ CAMPOS_POR_TIPO = {
         "Titular",
         "Telefone",
         "Valor Débito Original",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Vencimento das Faturas",
         "Vencimento Acordo",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACP - PARCELADO": [
@@ -418,13 +470,16 @@ CAMPOS_POR_TIPO = {
         "Titular",
         "Telefone",
         "Valor Débito Original",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Valor de Entrada",
         "Quantidade de Parcelas",
         "Valor de Cada Parcela",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACV - MATRÍCULA ATIVA": [
@@ -433,7 +488,9 @@ CAMPOS_POR_TIPO = {
         "Titular",
         "Valor Total Atualizado",
         "Valor Debito Original",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Forma de Pagamento",
         "Data de Vencimento",
@@ -444,7 +501,9 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "Matrícula Inativa",
         "Valor Original",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Forma de Pagamento",
         "Data de Vencimento",
@@ -455,13 +514,17 @@ CAMPOS_POR_TIPO = {
         "CPF/CNPJ",
         "Matrícula Inativa",
         "Valor Original",
-        "De Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Negociado",
         "Matrícula para Transferência",
         "Matrícula",
         "Religação",
         "Valor Original",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Negociado",
         "Entrada Negociação",
         "Quantidade de Parcelas",
@@ -475,7 +538,9 @@ CAMPOS_POR_TIPO = {
         "Titular",
         "Valor Total Atualizado",
         "Valor Debito Original",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Negociado",
         "Entrada Negociação",
         "Quantidade de Parcelas",
@@ -489,10 +554,13 @@ CAMPOS_POR_TIPO = {
         "Titulo",
         "Valor Original",
         "Valor Total",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACC - PARCELADO": [
@@ -501,13 +569,16 @@ CAMPOS_POR_TIPO = {
         "Titulo",
         "Valor Original",
         "Valor Total",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Entrada",
         "Parcelas",
         "Valor da Parcela",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACD - À VISTA": [
@@ -517,10 +588,13 @@ CAMPOS_POR_TIPO = {
         "Titular",
         "Telefone",
         "Valor Debito Original",
-        "Valor Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACP - PARCELADO": [
@@ -530,23 +604,29 @@ CAMPOS_POR_TIPO = {
         "Titular",
         "Telefone",
         "Valor Debito Original",
-        "Valor Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor da Entrada",
         "Quantidade de Parcelas",
         "Valor de Cada Parcela",
         "Data de Vencimento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ],
     "ACD - ACORDO": [
         "Nome do Devedor",
         "CPF/CNPJ",
         "Valor Total Atualizado",
-        "Desconto",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
         "Valor Proposto",
         "Data de Vencimento",
         "Forma de Pagamento",
-        "Enviar pelo WhatsApp/E-mail",
+        "WhatsApp",
+        "E-mail",
         "Observações"
     ]
 }
@@ -560,10 +640,13 @@ NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 TÍTULOS: {Títulos}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}% NO JUROS E MULTA
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -574,11 +657,14 @@ NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 TÍTULOS: {Títulos}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}% NO JUROS E MULTA
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 PARCELAMENTO: {Parcelamento}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -589,12 +675,15 @@ NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 CRE/CONTRATO: {CRE/Contrato}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}% NO JUROS E MULTA
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 VALOR CONFIRMADO: {Valor Confirmado}
 HORÁRIO DA LIGAÇÃO: {Horário da Ligação}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -605,13 +694,16 @@ NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 CRE/CONTRATO: {CRE/Contrato}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}% NO JUROS E MULTA
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 PARCELAMENTO: {Parcelamento}
 VENCIMENTO: {Data de Vencimento}
 VALOR CONFIRMADO: {Valor Confirmado}
 HORÁRIO DA LIGAÇÃO: {Horário da Ligação}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -622,10 +714,13 @@ NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 CONTRATO: {Contrato}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -636,13 +731,16 @@ NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 CONTRATO: {Contrato}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 ENTRADA DE: {Entrada de}
-QUANT.P: {Quant. P}
+QUANTIDADE DE PARCELAS: {Quantidade de Parcelas}
 VALOR DAS PARCELAS: {Valor das Parcelas}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -660,7 +758,8 @@ VALOR TOTAL NEGOCIADO: {Valor Total Negociado}
 Nº DE PARCELAS NO CARTÃO DE CRÉDITO: {Nº de Parcelas no Cartão}
 NÚMERO E VALORES DOS TÍTULOS RENEGOCIADOS (Principal): {Número e Valores dos Títulos}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -678,7 +777,8 @@ VALOR TOTAL NEGOCIADO: {Valor Total Negociado}
 Nº DE PARCELAS NO CARTÃO DE CRÉDITO: {Nº de Parcelas no Cartão}
 NÚMERO E VALORES DOS TÍTULOS RENEGOCIADOS (Principal): {Número e Valores dos Títulos}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -691,11 +791,14 @@ CPF: {CPF/CNPJ}
 REFERENCIA: {Referência}
 VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -708,14 +811,17 @@ CPF: {CPF/CNPJ}
 REFERENCIA: {Referência}
 VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VALOR DA ENTRADA: {Entrada (Boleto)}
 QUANTIDADE DE PARCELAS: {Qtd de Parcelas}
 VALOR DE CADA PARCELA: {Valor de Cada Parcela}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -741,11 +847,14 @@ MATRÍCULA: {Matrícula}
 GRAVAÇÃO (TELEFONE): {Gravação (Telefone)}
 VALOR ORIGINAL: {Valor Original}
 VALOR ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -756,14 +865,17 @@ MATRÍCULA: {Matrícula}
 GRAVAÇÃO (TELEFONE): {Gravação (Telefone)}
 VALOR ORIGINAL: {Valor Original}
 VALOR ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO PARA PARCELAMENTO: {Valor Proposto para Parcelamento}
 ENTRADA (BOLETO): {Entrada (Boleto)}
 QTD DE PARCELAS: {Qtd de Parcelas}
 VALOR DAS PARCELAS: {Valor de Cada Parcela}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -788,11 +900,14 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULAR: {Titular}
 TELEFONE: {Telefone}
 VALOR DÉBITO ORIGINAL: {Valor Débito Original}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO DAS FATURAS: {Vencimento das Faturas}
 VENCIMENTO ACORDO: {Vencimento Acordo}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -805,13 +920,16 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULAR: {Titular}
 TELEFONE: {Telefone}
 VALOR DÉBITO ORIGINAL: {Valor Débito Original}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VALOR DE ENTRADA: {Valor de Entrada}
 QUANTIDADE DE PARCELAS: {Quantidade de Parcelas}
 VALOR DE CADA PARCELA: {Valor de Cada Parcela}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -824,11 +942,14 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULAR: {Titular}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
 VALOR DEBITO ORIGINAL: {Valor Debito Original}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 """,
     
     "ACV - MATRÍCULA INATIVA": """
@@ -839,11 +960,14 @@ TITULAR: {Titular}
 CPF: {CPF/CNPJ}
 MATRÍCULA INATIVA: {Matrícula Inativa}
 VALOR ORIGINAL: {Valor Original}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 """,
     
     "ACP - INATIVO + ATIVO": """
@@ -854,7 +978,9 @@ TITULAR: {Titular}
 CPF: {CPF/CNPJ}
 MATRÍCULA INATIVA: {Matrícula Inativa}
 VALOR ORIGINAL: {Valor Original}
-DE DESCONTO: {De Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR NEGOCIADO: {Valor Negociado}
 -
 MATRÍCULA PARA TRANSFERÊNCIA DO DÉBITO: {Matrícula para Transferência}
@@ -862,7 +988,9 @@ MATRÍCULA PARA TRANSFERÊNCIA DO DÉBITO: {Matrícula para Transferência}
 MATRÍCULA ATIVA: {Matrícula}
 RELIGAÇÃO: {Religação}
 VALOR ORIGINAL: {Valor Original}
-% DESCONTO: {Desconto}
+% DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR NEGOCIADO: {Valor Negociado}
 -
 ENTRADA NEGOCIAÇÃO: {Entrada Negociação}
@@ -881,13 +1009,16 @@ ATIVO - RELIGAÇÃO: {Ativo - Religação}
 TITULAR: {Titular}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
 VALOR DEBITO ORIGINAL: {Valor Debito Original}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR NEGOCIADO: {Valor Negociado}
 ENTRADA NEGOCIAÇÃO: {Entrada Negociação}
 QUANTIDADE DE PARCELAS: {Quantidade de Parcelas}
 VALOR DA PARCELAS: {Valor da Parcelas}
 VENCIMENTO DA ENTRADA: {Vencimento da Entrada}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 """,
     
     "ACC - À VISTA": """
@@ -898,10 +1029,13 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULO: {Titulo}
 VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL: {Valor Total}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -913,13 +1047,16 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULO: {Titulo}
 VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL: {Valor Total}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 ENTRADA: {Entrada}
 PARCELAS: {Parcelas}
 VALOR DA PARCELA: {Valor da Parcela}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -932,10 +1069,13 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULAR: {Titular}
 TELEFONE: {Telefone}
 VALOR DEBITO ORIGINAL: {Valor Debito Original}
-VALOR DESCONTO: {Valor Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -948,12 +1088,15 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULAR: {Titular}
 TELEFONE: {Telefone}
 VALOR DEBITO ORIGINAL: {Valor Debito Original}
-VALOR DESCONTO: {Valor Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR DA ENTRADA: {Valor da Entrada}
 QUANTIDADE DE PARCELAS: {Quantidade de Parcelas}
 VALOR DE CADA PARCELA: {Valor de Cada Parcela}
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -963,11 +1106,14 @@ OBS: {Observações}
 NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
@@ -977,11 +1123,14 @@ LIBERDADE MÉDICA - ACD - ACORDO:
 NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto}
+DESCONTO PRINCIPAL: {Desconto Principal}
+DESCONTO JUROS: {Desconto Juros}
+DESCONTO MULTA: {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
-ENVIAR PELO WHATS/E-MAIL: {Enviar pelo WhatsApp/E-mail}
+WHATSAPP: {WhatsApp}
+E-MAIL: {E-mail}
 OBS: {Observações}
 """
 }

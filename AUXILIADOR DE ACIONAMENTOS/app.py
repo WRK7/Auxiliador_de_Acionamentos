@@ -16,7 +16,7 @@ class AcionamentoApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Gerador de Acionamentos")
-        self.root.geometry("900x700")
+        self.root.geometry("1000x650")
         self.root.configure(bg=DARK_THEME['bg_primary'])
         self.root.resizable(True, True)
         
@@ -177,13 +177,13 @@ class AcionamentoApp:
             for campo in campos_necessarios:
                 if campo in self.campos_entries:
                     # Campo já existe, apenas mostrar
-                    self.campos_frames[campo].pack(fill='x', pady=4)
+                    self.campos_frames[campo].pack(fill='x', pady=2)
                 else:
                     # Campo não existe, criar
                     valor_inicial = self.campos_info.get(campo, "")
                     entry, status_label = self.criar_campo_com_validacao(self.campos_container, campo, valor_inicial)
                     self.campos_entries[campo] = entry
-                    self.campos_frames[campo].pack(fill='x', pady=4)
+                    self.campos_frames[campo].pack(fill='x', pady=2)
         else:
             self.mostrar_instrucao_campos()
     
@@ -197,31 +197,75 @@ class AcionamentoApp:
     def criar_campo_com_validacao(self, parent, campo, valor):
         """Cria um campo de entrada com validação automática"""
         row_frame = tk.Frame(parent, bg=DARK_THEME['bg_secondary'])
-        row_frame.pack(fill='x', pady=4)
+        row_frame.pack(fill='x', pady=2)  # Reduzido de 4 para 2
         
         # Armazenar referência ao frame para controle de visibilidade
         self.campos_frames[campo] = row_frame
         
-        # Label do campo
-        label = tk.Label(row_frame, text=f"{campo}:", width=20, anchor='w',
-                        font=('Segoe UI', 10), 
+        # Label do campo com cores indicativas
+        if campo == "Desconto Principal":
+            label_color = '#FF6B6B'  # Vermelho para principal
+        elif campo == "Desconto Juros":
+            label_color = '#4ECDC4'  # Azul para juros
+        elif campo == "Desconto Multa":
+            label_color = '#FFE66D'  # Amarelo para multa
+        elif campo == "WhatsApp":
+            label_color = '#45B7D1'  # Azul para WhatsApp
+        elif campo == "E-mail":
+            label_color = '#96CEB4'  # Verde para E-mail
+        elif campo == "Data de Vencimento":
+            label_color = '#98D8C8'  # Verde para data
+        elif campo in ["Valor da Dívida", "Valor Total Atualizado", "Valor Proposto", "Valor Confirmado", 
+                      "Valor Total Negociado", "Valor Original", "Valor Débito Original", 
+                      "Valor Debito Original", "Valor Negociado", "Valor Total", "Total da Dívida"]:
+            label_color = '#DDA0DD'  # Roxo para valores
+        else:
+            label_color = DARK_THEME['text_primary']
+            
+        label = tk.Label(row_frame, text=f"{campo}:", width=18, anchor='w',
+                        font=('Segoe UI', 9, 'bold'), 
                         bg=DARK_THEME['bg_secondary'], 
-                        fg=DARK_THEME['text_primary'])
+                        fg=label_color)
         label.pack(side='left')
         
         # Campo obrigatório - adicionar asterisco
         if campo in CAMPOS_OBRIGATORIOS:
             label.config(text=f"{campo} *:", fg=DARK_THEME['danger'])
         
-        # Entry com validação - tamanho específico para data
+        # Entry com validação - tamanho padronizado para consistência visual
+        entry_width = 30  # Tamanho único para todos os campos
+        
+        # Cores específicas por tipo de campo
         if campo == "Data de Vencimento":
-            entry_width = 15  # Menor para data
+            bg_color = '#2d4a2d'  # Verde escuro para data
+            fg_color = '#90EE90'  # Verde claro para texto
+        elif campo == "Desconto Principal":
+            bg_color = '#4a2d2d'  # Vermelho escuro para principal
+            fg_color = '#FFB6C1'  # Rosa claro para texto
+        elif campo == "Desconto Juros":
+            bg_color = '#2d2d4a'  # Azul escuro para juros
+            fg_color = '#ADD8E6'  # Azul claro para texto
+        elif campo == "Desconto Multa":
+            bg_color = '#4a4a2d'  # Amarelo escuro para multa
+            fg_color = '#FFFFE0'  # Amarelo claro para texto
+        elif campo == "WhatsApp":
+            bg_color = '#2d4a2d'  # Verde escuro para WhatsApp
+            fg_color = '#90EE90'  # Verde claro para texto
+        elif campo == "E-mail":
+            bg_color = '#2d2d4a'  # Azul escuro para E-mail
+            fg_color = '#ADD8E6'  # Azul claro para texto
+        elif campo in ["Valor da Dívida", "Valor Total Atualizado", "Valor Proposto", "Valor Confirmado", 
+                      "Valor Total Negociado", "Valor Original", "Valor Débito Original", 
+                      "Valor Debito Original", "Valor Negociado", "Valor Total", "Total da Dívida"]:
+            bg_color = '#4a2d4a'  # Roxo escuro para valores
+            fg_color = '#DDA0DD'  # Roxo claro para texto
         else:
-            entry_width = 45  # Normal para outros campos
+            bg_color = DARK_THEME['surface']
+            fg_color = DARK_THEME['text_primary']
             
-        entry = tk.Entry(row_frame, font=('Segoe UI', 10), width=entry_width,
-                        bg=DARK_THEME['surface'], fg=DARK_THEME['text_primary'],
-                        relief='flat', bd=1, insertbackground=DARK_THEME['text_primary'],
+        entry = tk.Entry(row_frame, font=('Segoe UI', 9), width=entry_width,
+                        bg=bg_color, fg=fg_color,
+                        relief='flat', bd=1, insertbackground=fg_color,
                         highlightthickness=1, highlightcolor=DARK_THEME['accent'],
                         highlightbackground=DARK_THEME['border'])
         entry.pack(side='left', padx=(15, 10))
@@ -282,19 +326,15 @@ class AcionamentoApp:
             valido, mensagem = self.field_validators.validar_campo_com_mensagem(campo, valor_atual)
             
             if valido:
-                status_label.config(text="✓", fg=DARK_THEME['success'])
-                # Mudar cor de fundo e texto do campo para sucesso
-                entry.config(bg=DARK_THEME['success_bg'], fg='#2d5a2d')
-                # Mudar cor do label para sucesso
-                label.config(fg=DARK_THEME['success'])
+                status_label.config(text="✓", fg='#00FF00', font=('Segoe UI', 10, 'bold'))
+                # Manter cores específicas do campo mas com borda de sucesso
+                entry.config(highlightcolor='#00FF00', highlightthickness=2)
                 # Tooltip com mensagem de sucesso
                 UIComponents.create_tooltip(status_label, mensagem)
             else:
-                status_label.config(text="✗", fg=DARK_THEME['danger'])
-                # Mudar cor de fundo e texto do campo para erro
-                entry.config(bg=DARK_THEME['danger_bg'], fg='#8b0000')
-                # Mudar cor do label para erro
-                label.config(fg=DARK_THEME['danger'])
+                status_label.config(text="✗", fg='#FF0000', font=('Segoe UI', 10, 'bold'))
+                # Manter cores específicas do campo mas com borda de erro
+                entry.config(highlightcolor='#FF0000', highlightthickness=2)
                 # Tooltip com mensagem de erro
                 UIComponents.create_tooltip(status_label, mensagem)
         
@@ -353,7 +393,7 @@ class AcionamentoApp:
         
         # SIDEBAR - Lado esquerdo
         sidebar_frame = tk.Frame(main_container, bg=DARK_THEME['bg_secondary'], 
-                                relief='flat', bd=1, width=400)
+                                relief='flat', bd=1, width=450)
         sidebar_frame.pack(side='left', fill='y', padx=(0, 15))
         sidebar_frame.pack_propagate(False)  # Manter largura fixa
         
@@ -444,7 +484,7 @@ class AcionamentoApp:
         resultado_frame.pack(fill='both', expand=True, padx=15, pady=15)
         
         # Texto do modelo
-        self.texto_modelo = tk.Text(resultado_frame, height=10, font=('Consolas', 10),
+        self.texto_modelo = tk.Text(resultado_frame, height=5, font=('Consolas', 9),
                                    wrap='word', bg=DARK_THEME['surface'],
                                    fg=DARK_THEME['text_primary'],
                                    relief='flat', bd=1, insertbackground=DARK_THEME['text_primary'],

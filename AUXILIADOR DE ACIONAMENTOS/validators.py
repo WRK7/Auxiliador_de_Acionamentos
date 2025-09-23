@@ -201,13 +201,26 @@ class Validator:
     
     @staticmethod
     def formatar_porcentagem(texto):
-        """Formata porcentagem"""
-        # Remove caracteres não numéricos
+        """Formata porcentagem com validação específica"""
+        # Remove caracteres não numéricos e vírgulas/pontos
         numeros = re.sub(r'[^0-9]', '', texto)
         
         if numeros:
+            # Limitar a 4 dígitos (máximo 99,99%)
+            if len(numeros) > 4:
+                numeros = numeros[:4]
+            
+            # Se tem mais de 2 dígitos, adicionar vírgula antes dos últimos 2
+            if len(numeros) > 2:
+                # Inserir vírgula antes dos últimos 2 dígitos
+                parte_inteira = numeros[:-2]
+                parte_decimal = numeros[-2:]
+                valor_formatado = f"{parte_inteira},{parte_decimal}"
+            else:
+                valor_formatado = numeros
+            
             # Adiciona o símbolo de porcentagem
-            return f"{numeros}%"
+            return f"{valor_formatado}%"
         
         return texto
     

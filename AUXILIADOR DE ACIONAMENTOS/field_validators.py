@@ -55,6 +55,9 @@ class FieldValidators:
         elif self._eh_campo_valor(campo):
             # Validação para campos de valor monetário
             return self._validar_valor_monetario(valor)
+        elif self._eh_campo_porcentagem(campo):
+            # Validação para campos de porcentagem
+            return self._validar_porcentagem(valor)
         elif campo in CAMPOS_OBRIGATORIOS:
             return len(valor.strip()) > 0
         
@@ -98,19 +101,12 @@ class FieldValidators:
                 return True, "Data válida"
             else:
                 return False, "Formato inválido (DD/MM/AAAA)"
-        elif campo == "Enviar pelo WhatsApp/E-mail":
-            # Validação específica para campo de envio
-            if not valor.strip():
-                return False, "Campo obrigatório"
-            # Verificar se contém pelo menos uma das opções
-            valor_lower = valor.lower()
-            if "whatsapp" in valor_lower or "email" in valor_lower or "e-mail" in valor_lower:
-                return True, "Formato válido"
-            else:
-                return False, "Digite 'WhatsApp' ou 'E-mail'"
         elif self._eh_campo_valor(campo):
             # Validação para campos de valor monetário
             return self._validar_valor_monetario_com_mensagem(valor)
+        elif self._eh_campo_porcentagem(campo):
+            # Validação para campos de porcentagem
+            return self._validar_porcentagem_com_mensagem(valor)
         elif campo in CAMPOS_OBRIGATORIOS:
             if len(valor.strip()) > 0:
                 return True, "Campo preenchido"
@@ -156,6 +152,21 @@ class FieldValidators:
                 if ',' in valor_atual or '.' in valor_atual:
                     return 'break'  # Já tem separador decimal
         
+        elif self._eh_campo_porcentagem(campo):
+            # Permitir números e vírgula para campos de porcentagem
+            if not event.char.isdigit() and event.char != ',':
+                return 'break'
+            
+            # Verificar se já tem vírgula
+            valor_atual = event.widget.get()
+            if event.char == ',' and ',' in valor_atual:
+                return 'break'  # Já tem vírgula
+            
+            # Verificar se já tem 4 dígitos (máximo 99,99%)
+            numeros = re.sub(r'[^0-9]', '', valor_atual)
+            if len(numeros) >= 4:
+                return 'break'
+        
         return None  # Permite entrada normal para outros campos
     
     def _eh_campo_valor(self, campo):
@@ -168,6 +179,13 @@ class FieldValidators:
             "Valor Negociado", "Valor da Parcelas", "Valor Total", "Valor da Parcela"
         ]
         return campo in campos_valor
+    
+    def _eh_campo_porcentagem(self, campo):
+        """Verifica se o campo é um campo de porcentagem"""
+        campos_porcentagem = [
+            "Desconto Principal", "Desconto Juros", "Desconto Multa"
+        ]
+        return campo in campos_porcentagem
     
     def _validar_valor_monetario(self, valor):
         """Valida se o valor monetário é válido"""
@@ -209,3 +227,44 @@ class FieldValidators:
             return False, "Formato inválido (ex: 1000,00 ou 1000.00)"
         
         return True, "Valor válido"
+    
+    def _validar_porcentagem(self, valor):
+        """Valida se o valor de porcentagem é válido"""
+        if not valor.strip():
+            return True  # Campo vazio é válido (não obrigatório)
+        
+        # Remove formatação e verifica se é um número válido
+        valor_limpo = re.sub(r'[^\d,]', '', valor)
+        
+        if not valor_limpo:
+            return False
+        
+        # Verificar se tem apenas números e vírgulas
+        if not re.match(r'^[\d,]+$', valor_limpo):
+            return False
+        
+        # Verificar se não tem múltiplas vírgulas
+        if valor_limpo.count(',') > 1:
+            return False
+        
+        # Verificar se vírgula não está no início ou fim
+        if valor_limpo.startswith(',') or valor_limpo.endswith(','):
+            return False
+        
+        # Tentar converter para float
+        try:
+            # Substituir vírgula por ponto para conversão
+            valor_float = float(valor_limpo.replace(',', '.'))
+            return 0 <= valor_float <= 100  # Valores entre 0 e 100%
+        except ValueError:
+            return False
+    
+    def _validar_porcentagem_com_mensagem(self, valor):
+        """Valida valor de porcentagem e retorna (valido, mensagem)"""
+        if not valor.strip():
+            return True, "Campo vazio"
+        
+        if not self._validar_porcentagem(valor):
+            return False, "Formato inválido (ex: 15,50 ou 15)"
+        
+        return True, "Porcentagem válida"
