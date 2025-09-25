@@ -29,32 +29,26 @@ class ModelGenerator:
             valor = entry.get().strip()
             
             # Ignorar placeholder na coleta de dados
-            if campo == "Data de Vencimento" and valor == "DD/MM/AAAA":
+            if campo == "Data de Vencimento" and valor in ["DD/MM/AAAA", "Ex: 26/09/2025"]:
                 valor = ""
             
             informacoes[campo] = valor
             
-            # Validar campos obrigatórios
-            if campo in CAMPOS_OBRIGATORIOS and not valor:
-                campos_invalidos.append(f"{campo} (obrigatório)")
+            # Validar CPF/CNPJ, Data de Vencimento e Porcentagens - bloquear se inválidos
+            if campo in ["CPF/CNPJ", "Data de Vencimento"] and valor:
+                if not self._validar_campo_basico(campo, valor, carteira_var):
+                    if campo == "CPF/CNPJ":
+                        tipo_doc = Validator.obter_tipo_documento(valor)
+                        campos_invalidos.append(f"{campo} ({tipo_doc} inválido)")
+                    elif campo == "Data de Vencimento":
+                        campos_invalidos.append(f"{campo} (data inválida ou fora do prazo)")
             
-            # Validar campos específicos
-            elif valor and not self._validar_campo_basico(campo, valor, carteira_var):
-                if campo == "CPF/CNPJ":
-                    tipo_doc = Validator.obter_tipo_documento(valor)
-                    campos_invalidos.append(f"{campo} ({tipo_doc} inválido)")
-                elif campo == "Data de Vencimento":
-                    # Mensagem específica para data de vencimento
-                    carteira_atual = carteira_var.get()
-                    if carteira_atual:
-                        valido, mensagem = Validator.validar_data_vencimento(valor, carteira_atual, PRAZO_MAXIMO_POR_CARTEIRA)
-                        campos_invalidos.append(f"{campo} ({mensagem})")
-                    else:
-                        campos_invalidos.append(f"{campo} (formato inválido)")
-                else:
-                    campos_invalidos.append(f"{campo} (inválido)")
+            # Validar campos de porcentagem
+            if self._eh_campo_porcentagem(campo) and valor:
+                if not self._validar_porcentagem_basica(valor):
+                    campos_invalidos.append(f"{campo} (porcentagem inválida)")
         
-        # Verificar se há campos inválidos
+        # Bloquear se CPF/CNPJ, Data de Vencimento ou Porcentagens inválidos
         if campos_invalidos:
             mensagem = "Por favor, corrija os seguintes campos:\n\n" + "\n".join(f"• {campo}" for campo in campos_invalidos)
             texto_modelo.delete(1.0, 'end')
@@ -141,3 +135,42 @@ Data: {data_atual}
                 messagebox.showerror("Erro", f"Erro ao copiar: {e}")
         else:
             messagebox.showwarning("Aviso", "Nenhum modelo para copiar!")
+    
+    def _eh_campo_porcentagem(self, campo):
+        """Verifica se o campo é um campo de porcentagem"""
+        campos_porcentagem = [
+            "Desconto Principal", "Desconto Juros", "Desconto Multa"
+        ]
+        return campo in campos_porcentagem
+    
+    def _validar_porcentagem_basica(self, valor):
+        """Validação básica de porcentagem"""
+        import re
+        if not valor.strip():
+            return True  # Campo vazio é válido
+        
+        # Remove formatação e verifica se é um número válido
+        valor_limpo = re.sub(r'[^\d,]', '', valor)
+        
+        if not valor_limpo:
+            return False
+        
+        # Verificar se tem apenas números e vírgulas
+        if not re.match(r'^[\d,]+$', valor_limpo):
+            return False
+        
+        # Verificar se não tem múltiplas vírgulas
+        if valor_limpo.count(',') > 1:
+            return False
+        
+        # Verificar se vírgula não está no início ou fim
+        if valor_limpo.startswith(',') or valor_limpo.endswith(','):
+            return False
+        
+        # Tentar converter para float
+        try:
+            # Substituir vírgula por ponto para conversão
+            valor_float = float(valor_limpo.replace(',', '.'))
+            return 0 <= valor_float <= 100  # Valores entre 0 e 100%
+        except ValueError:
+            return False

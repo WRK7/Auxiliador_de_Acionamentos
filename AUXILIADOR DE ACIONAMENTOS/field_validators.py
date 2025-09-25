@@ -8,166 +8,61 @@ from config import CAMPOS_OBRIGATORIOS, FORMATACAO_AUTOMATICA, PRAZO_MAXIMO_POR_
 from theme import DARK_THEME
 
 class FieldValidators:
-    """Classe para validação e formatação de campos"""
+    """Classe permissiva: sem formatação automática e sem bloqueios."""
     
     def __init__(self, carteira_var):
         self.carteira_var = carteira_var
     
     def aplicar_formatacao_automatica(self, campo, valor):
-        """Aplica formatação automática baseada no tipo do campo"""
-        if campo in FORMATACAO_AUTOMATICA:
-            tipo_formatacao = FORMATACAO_AUTOMATICA[campo]
-            
-            if tipo_formatacao == "cpf_cnpj":
-                return Validator.formatar_cpf_cnpj(valor)
-            elif tipo_formatacao == "data":
-                return Validator.formatar_data(valor)
-            elif tipo_formatacao == "moeda":
-                return Validator.formatar_moeda(valor)
-            elif tipo_formatacao == "porcentagem":
-                return Validator.formatar_porcentagem(valor)
-            elif tipo_formatacao == "parcela":
-                return Validator.formatar_parcela(valor)
-        
         return valor
     
     def validar_campo(self, campo, valor):
-        """Valida um campo específico"""
+        """Valida CPF/CNPJ, Data de Vencimento e Porcentagens, outros campos sempre válidos"""
         if campo == "CPF/CNPJ":
+            if not valor.strip():
+                return True  # Campo vazio é válido
             numeros = re.sub(r'[^0-9]', '', valor)
             if len(numeros) == 11:
                 return Validator.validar_cpf(valor)
             elif len(numeros) == 14:
                 return Validator.validar_cnpj(valor)
-            return False
+            return False  # Tamanho inválido
         elif campo == "Data de Vencimento":
-            # Usar validação específica para data de vencimento
-            carteira_atual = self.carteira_var.get()
-            if carteira_atual:
-                valido, mensagem = Validator.validar_data_vencimento(valor, carteira_atual, PRAZO_MAXIMO_POR_CARTEIRA)
-                return valido
-            else:
-                # Se não há carteira selecionada, usar validação básica
-                return Validator.validar_data(valor)
-        elif campo == "Data de Pagamento":
-            # Validação básica para data de pagamento
-            return Validator.validar_data(valor)
-        elif self._eh_campo_valor(campo):
-            # Validação para campos de valor monetário
-            return self._validar_valor_monetario(valor)
+            if not valor.strip():
+                return True  # Campo vazio é válido
+            return self._validar_data_vencimento(valor)
         elif self._eh_campo_porcentagem(campo):
-            # Validação para campos de porcentagem
+            if not valor.strip():
+                return True  # Campo vazio é válido
             return self._validar_porcentagem(valor)
-        elif campo in CAMPOS_OBRIGATORIOS:
-            return len(valor.strip()) > 0
-        
         return True
     
     def validar_campo_com_mensagem(self, campo, valor):
-        """Valida um campo específico e retorna (valido, mensagem)"""
+        """Valida CPF/CNPJ, Data de Vencimento e Porcentagens, outros campos sempre válidos"""
         if campo == "CPF/CNPJ":
+            if not valor.strip():
+                return True, "Campo vazio"
             numeros = re.sub(r'[^0-9]', '', valor)
-            
             if len(numeros) == 11:
                 valido = Validator.validar_cpf(valor)
-                if valido:
-                    return True, "CPF válido"
-                else:
-                    return False, "CPF inválido - verifique os dígitos"
+                return (valido, "CPF válido" if valido else "CPF inválido")
             elif len(numeros) == 14:
                 valido = Validator.validar_cnpj(valor)
-                if valido:
-                    return True, "CNPJ válido"
-                else:
-                    return False, "CNPJ inválido - verifique os dígitos"
-            elif len(numeros) == 0:
-                return False, "Digite um CPF ou CNPJ"
+                return (valido, "CNPJ válido" if valido else "CNPJ inválido")
             else:
                 return False, f"Documento deve ter 11 (CPF) ou 14 (CNPJ) dígitos. Atual: {len(numeros)}"
         elif campo == "Data de Vencimento":
-            # Usar validação específica para data de vencimento
-            carteira_atual = self.carteira_var.get()
-            if carteira_atual:
-                return Validator.validar_data_vencimento(valor, carteira_atual, PRAZO_MAXIMO_POR_CARTEIRA)
-            else:
-                # Se não há carteira selecionada, usar validação básica
-                if Validator.validar_data(valor):
-                    return True, "Data válida"
-                else:
-                    return False, "Formato inválido (DD/MM/AAAA)"
-        elif campo == "Data de Pagamento":
-            # Validação básica para data de pagamento
-            if Validator.validar_data(valor):
-                return True, "Data válida"
-            else:
-                return False, "Formato inválido (DD/MM/AAAA)"
-        elif self._eh_campo_valor(campo):
-            # Validação para campos de valor monetário
-            return self._validar_valor_monetario_com_mensagem(valor)
+            if not valor.strip():
+                return True, "Campo vazio"
+            return self._validar_data_vencimento_com_mensagem(valor)
         elif self._eh_campo_porcentagem(campo):
-            # Validação para campos de porcentagem
+            if not valor.strip():
+                return True, "Campo vazio"
             return self._validar_porcentagem_com_mensagem(valor)
-        elif campo in CAMPOS_OBRIGATORIOS:
-            if len(valor.strip()) > 0:
-                return True, "Campo preenchido"
-            else:
-                return False, "Campo obrigatório"
-        
         return True, "Campo válido"
     
     def limitar_entrada(self, campo, event):
-        """Limita entrada de dados baseado no tipo do campo"""
-        # Permitir teclas de controle (backspace, delete, setas, etc.)
-        if event.keysym in ['BackSpace', 'Delete', 'Left', 'Right', 'Up', 'Down', 'Tab', 'Return']:
-            return None
-        
-        if campo in ["Data de Vencimento", "Data de Pagamento"]:
-            # Permitir apenas números
-            if not event.char.isdigit():
-                return 'break'
-            # Verificar se já tem 8 dígitos
-            valor_atual = event.widget.get()
-            numeros = re.sub(r'[^0-9]', '', valor_atual)
-            if len(numeros) >= 8:
-                return 'break'
-        
-        elif campo == "CPF/CNPJ":
-            # Permitir apenas números
-            if not event.char.isdigit():
-                return 'break'
-            # Verificar se já tem 14 dígitos
-            valor_atual = event.widget.get()
-            numeros = re.sub(r'[^0-9]', '', valor_atual)
-            if len(numeros) >= 14:
-                return 'break'
-        
-        elif self._eh_campo_valor(campo):
-            # Permitir apenas números, vírgulas e pontos para valores monetários
-            if not event.char.isdigit() and event.char not in [',', '.']:
-                return 'break'
-            
-            # Verificar se já tem vírgula ou ponto
-            valor_atual = event.widget.get()
-            if event.char in [',', '.']:
-                if ',' in valor_atual or '.' in valor_atual:
-                    return 'break'  # Já tem separador decimal
-        
-        elif self._eh_campo_porcentagem(campo):
-            # Permitir números e vírgula para campos de porcentagem
-            if not event.char.isdigit() and event.char != ',':
-                return 'break'
-            
-            # Verificar se já tem vírgula
-            valor_atual = event.widget.get()
-            if event.char == ',' and ',' in valor_atual:
-                return 'break'  # Já tem vírgula
-            
-            # Verificar se já tem 4 dígitos (máximo 99,99%)
-            numeros = re.sub(r'[^0-9]', '', valor_atual)
-            if len(numeros) >= 4:
-                return 'break'
-        
-        return None  # Permite entrada normal para outros campos
+        return None
     
     def _eh_campo_valor(self, campo):
         """Verifica se o campo é um campo de valor monetário"""
@@ -308,3 +203,47 @@ class FieldValidators:
             return False, "Formato inválido (ex: 15,50 ou 15)"
         
         return True, "Porcentagem válida"
+    
+    def _validar_data_vencimento(self, valor):
+        """Valida data de vencimento: DD/MM/AAAA, de hoje até +7 dias"""
+        from datetime import datetime, timedelta
+        
+        # Verificar formato DD/MM/AAAA
+        if not re.match(r'^\d{2}/\d{2}/\d{4}$', valor):
+            return False
+        
+        try:
+            # Converter para datetime
+            data_vencimento = datetime.strptime(valor, '%d/%m/%Y')
+            hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            data_maxima = hoje + timedelta(days=7)
+            
+            # Verificar se está no período permitido
+            return hoje <= data_vencimento <= data_maxima
+        except ValueError:
+            return False
+    
+    def _validar_data_vencimento_com_mensagem(self, valor):
+        """Valida data de vencimento e retorna (valido, mensagem)"""
+        from datetime import datetime, timedelta
+        
+        if not valor.strip():
+            return True, "Campo vazio"
+        
+        # Verificar formato
+        if not re.match(r'^\d{2}/\d{2}/\d{4}$', valor):
+            return False, "Formato inválido (DD/MM/AAAA)"
+        
+        try:
+            data_vencimento = datetime.strptime(valor, '%d/%m/%Y')
+            hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            data_maxima = hoje + timedelta(days=7)
+            
+            if data_vencimento < hoje:
+                return False, f"Data não pode ser anterior a hoje ({hoje.strftime('%d/%m/%Y')})"
+            elif data_vencimento > data_maxima:
+                return False, f"Data não pode ser posterior a {data_maxima.strftime('%d/%m/%Y')} (máximo 7 dias)"
+            else:
+                return True, "Data válida"
+        except ValueError:
+            return False, "Data inválida"

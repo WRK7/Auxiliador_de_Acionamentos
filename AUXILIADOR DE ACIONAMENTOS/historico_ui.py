@@ -41,6 +41,9 @@ class HistoricoUI:
         
         self.criar_interface()
         self.carregar_dados()
+        
+        # Variável para delay na busca
+        self.busca_delay_job = None
     
     def criar_interface(self):
         """Cria a interface do histórico"""
@@ -101,15 +104,33 @@ class HistoricoUI:
         linha1 = tk.Frame(filtros_frame, bg=self.colors['bg_secondary'])
         linha1.pack(fill='x', padx=15, pady=10)
         
-        # Busca por texto
-        tk.Label(linha1, text="Buscar:", font=('Segoe UI', 10), 
+        # Busca inteligente
+        tk.Label(linha1, text="🔍 Busca Inteligente:", font=('Segoe UI', 10), 
                 bg=self.colors['bg_secondary'], fg=self.colors['text_primary']).pack(side='left')
         
-        self.entry_busca = tk.Entry(linha1, font=('Segoe UI', 10), width=20,
+        self.entry_busca = tk.Entry(linha1, font=('Segoe UI', 10), width=25,
                                    bg=self.colors['surface'], fg=self.colors['text_primary'],
                                    relief='flat', bd=1)
         self.entry_busca.pack(side='left', padx=(10, 5))
-        self.entry_busca.bind('<KeyRelease>', self.aplicar_filtros)
+        self.entry_busca.bind('<KeyRelease>', self.aplicar_filtros_com_delay)
+        
+        # Adicionar placeholder
+        self.entry_busca.insert(0, "Digite CPF, nome, ID, valor...")
+        self.entry_busca.config(fg=self.colors['text_muted'])
+        
+        # Gerenciar placeholder
+        def on_focus_in_busca(event):
+            if self.entry_busca.get() == "Digite CPF, nome, ID, valor...":
+                self.entry_busca.delete(0, tk.END)
+                self.entry_busca.config(fg=self.colors['text_primary'])
+        
+        def on_focus_out_busca(event):
+            if not self.entry_busca.get().strip():
+                self.entry_busca.insert(0, "Digite CPF, nome, ID, valor...")
+                self.entry_busca.config(fg=self.colors['text_muted'])
+        
+        self.entry_busca.bind('<FocusIn>', on_focus_in_busca)
+        self.entry_busca.bind('<FocusOut>', on_focus_out_busca)
         
         # Filtro por carteira
         tk.Label(linha1, text="Carteira:", font=('Segoe UI', 10), 
@@ -138,7 +159,7 @@ class HistoricoUI:
         self.combo_periodo = ttk.Combobox(linha2, width=15, state='readonly',
                                          values=["Todos", "Hoje", "Últimos 7 dias", "Últimos 30 dias", "Este mês"])
         self.combo_periodo.pack(side='left', padx=(10, 5))
-        self.combo_periodo.set("Últimos 30 dias")
+        self.combo_periodo.set("Todos")
         self.combo_periodo.bind('<<ComboboxSelected>>', self.aplicar_filtros)
         
         # Filtro por valor mínimo
@@ -159,6 +180,11 @@ class HistoricoUI:
         
         tk.Button(linha2, text="📊 Estatísticas", command=self.mostrar_estatisticas,
                  bg=self.colors['success'], fg=self.colors['text_primary'],
+                 font=('Segoe UI', 9), relief='flat', bd=0, cursor='hand2',
+                 padx=15, pady=5).pack(side='left', padx=5)
+        
+        tk.Button(linha2, text="❓ Ajuda da Busca", command=self.mostrar_ajuda_busca,
+                 bg=self.colors['text_muted'], fg=self.colors['text_primary'],
                  font=('Segoe UI', 9), relief='flat', bd=0, cursor='hand2',
                  padx=15, pady=5).pack(side='left', padx=5)
     
@@ -240,6 +266,8 @@ class HistoricoUI:
         # Carregar histórico
         historico = self.historico_manager.carregar_historico()
         
+        print(f"🔍 DEBUG: Carregando {len(historico)} registros no histórico")
+        
         # Atualizar combos
         carteiras = list(set([a['carteira'] for a in historico]))
         carteiras.sort()
@@ -253,16 +281,31 @@ class HistoricoUI:
         self.combo_tipo['values'] = tipos
         self.combo_tipo.set("Todos")
         
+        # Garantir que o período está em "Todos"
+        self.combo_periodo.set("Todos")
+        
+        print(f"📊 DEBUG: Combos configurados - Aplicando filtros...")
+        
         # Aplicar filtros
         self.aplicar_filtros()
+    
+    def aplicar_filtros_com_delay(self, event=None):
+        """Aplica filtros com delay para evitar busca excessiva"""
+        # Cancelar job anterior se existir
+        if self.busca_delay_job:
+            self.janela.after_cancel(self.busca_delay_job)
+        
+        # Agendar nova busca após 500ms
+        self.busca_delay_job = self.janela.after(500, self.aplicar_filtros)
     
     def aplicar_filtros(self, event=None):
         """Aplica os filtros selecionados"""
         # Obter filtros
         filtros = {}
         
-        if self.entry_busca.get().strip():
-            filtros['texto'] = self.entry_busca.get().strip()
+        busca_texto = self.entry_busca.get().strip()
+        if busca_texto and busca_texto != "Digite CPF, nome, ID, valor...":
+            filtros['texto'] = busca_texto
         
         if self.combo_carteira.get() and self.combo_carteira.get() != "Todas":
             filtros['carteira'] = self.combo_carteira.get()
@@ -274,24 +317,29 @@ class HistoricoUI:
         if self.entry_valor_min.get().strip():
             filtros['valor_minimo'] = self.entry_valor_min.get().strip()
         
-        # Filtro por período
+        # Filtro por período - só aplicar se não for "Todos"
         periodo = self.combo_periodo.get()
-        if periodo == "Hoje":
-            filtros['data_inicio'] = datetime.now().strftime('%d/%m/%Y')
-            filtros['data_fim'] = datetime.now().strftime('%d/%m/%Y')
-        elif periodo == "Últimos 7 dias":
-            data_inicio = (datetime.now() - timedelta(days=7)).strftime('%d/%m/%Y')
-            filtros['data_inicio'] = data_inicio
-        elif periodo == "Últimos 30 dias":
-            data_inicio = (datetime.now() - timedelta(days=30)).strftime('%d/%m/%Y')
-            filtros['data_inicio'] = data_inicio
-        elif periodo == "Este mês":
-            hoje = datetime.now()
-            data_inicio = f"01/{hoje.month:02d}/{hoje.year}"
-            filtros['data_inicio'] = data_inicio
+        if periodo and periodo != "Todos":
+            if periodo == "Hoje":
+                filtros['data_inicio'] = datetime.now().strftime('%d/%m/%Y')
+                filtros['data_fim'] = datetime.now().strftime('%d/%m/%Y')
+            elif periodo == "Últimos 7 dias":
+                data_inicio = (datetime.now() - timedelta(days=7)).strftime('%d/%m/%Y')
+                filtros['data_inicio'] = data_inicio
+            elif periodo == "Últimos 30 dias":
+                data_inicio = (datetime.now() - timedelta(days=30)).strftime('%d/%m/%Y')
+                filtros['data_inicio'] = data_inicio
+            elif periodo == "Este mês":
+                hoje = datetime.now()
+                data_inicio = f"01/{hoje.month:02d}/{hoje.year}"
+                filtros['data_inicio'] = data_inicio
+        
+        print(f"🎯 DEBUG: Filtros aplicados: {filtros}")
         
         # Buscar com filtros
         resultado = self.historico_manager.buscar_acionamentos(filtros)
+        
+        print(f"📋 DEBUG: Encontrados {len(resultado)} registros após filtros")
         
         # Atualizar tabela
         self.atualizar_tabela(resultado)
@@ -302,18 +350,22 @@ class HistoricoUI:
         for item in self.tree.get_children():
             self.tree.delete(item)
         
+        print(f"🔄 DEBUG: Atualizando tabela com {len(acionamentos)} registros")
+        
         # Adicionar dados
-        for acionamento in acionamentos:
+        for i, acionamento in enumerate(acionamentos):
             valores = (
                 acionamento['id'],
                 acionamento['data_criacao'].split(' ')[0],  # Só a data
                 acionamento['carteira'],
                 acionamento['tipo'].split(' - ')[0],  # Só o tipo
                 acionamento['informacoes'].get('Nome do Devedor', ''),
-                acionamento['informacoes'].get('Valor da Dívida', ''),
+                acionamento['informacoes'].get('Valor Total Atualizado', acionamento['informacoes'].get('Valor da Dívida', '')),
                 acionamento['usuario']
             )
             self.tree.insert('', 'end', values=valores, tags=(acionamento['id'],))
+            
+        print(f"✅ DEBUG: {len(acionamentos)} linhas inseridas na tabela")
     
     def ver_detalhes(self, event=None):
         """Mostra os detalhes do acionamento selecionado"""
@@ -503,6 +555,70 @@ Total de Acionamentos: {stats['total']}
         conteudo += "\n=== POR MÊS ===\n"
         for mes, quantidade in stats['por_mes'].items():
             conteudo += f"{mes}: {quantidade}\n"
+        
+        texto.insert('1.0', conteudo)
+        texto.config(state='disabled')
+    
+    def mostrar_ajuda_busca(self):
+        """Mostra ajuda sobre como usar a busca inteligente"""
+        ajuda_janela = tk.Toplevel(self.janela)
+        ajuda_janela.title("💡 Como usar a Busca Inteligente")
+        ajuda_janela.geometry("600x500")
+        ajuda_janela.configure(bg=self.colors['bg_primary'])
+        
+        # Texto com ajuda
+        texto = tk.Text(ajuda_janela, font=('Segoe UI', 10),
+                       bg=self.colors['surface'], fg=self.colors['text_primary'],
+                       relief='flat', bd=1, wrap='word')
+        texto.pack(fill='both', expand=True, padx=15, pady=15)
+        
+        conteudo = """
+🔍 BUSCA INTELIGENTE - GUIA DE USO
+
+A busca inteligente detecta automaticamente o que você está procurando:
+
+📋 BUSCA POR ID DO ACIONAMENTO
+• Digite o ID completo: "ACD-2025-001"
+• Ou apenas parte: "ACD-001", "2025-001"
+• Ou componentes: "ACD", "2025"
+
+👤 BUSCA POR CPF/CNPJ
+• CPF completo: "091.988.201-33"
+• Apenas números: "09198820133"
+• Últimos dígitos: "201-33" ou "0133"
+• Útil para encontrar rapidamente sem digitar tudo
+
+💰 BUSCA POR VALOR (±10% de tolerância)
+• Valor com R$: "R$ 1.000,00"
+• Apenas números: "1000" ou "1000,50"
+• Encontra valores próximos automaticamente
+
+📝 BUSCA POR NOME/TEXTO
+• Busca em: Nome, Empresa, Cliente, Observações
+• Tolerante a erros: "Wesly" encontra "Wesley"
+• Busca por palavras: "João Silva" encontra qualquer registro com ambas
+
+🏢 BUSCA POR CARTEIRA/TIPO
+• Digite parte do nome: "SENAC" encontra "SENAC RJ"
+• Ou tipo: "ACD" encontra todos acordos
+
+💡 DICAS ESPECIAIS:
+• ✅ A busca é em tempo real (500ms de delay)
+• ✅ Não diferencia maiúsculas/minúsculas
+• ✅ Ignora acentos e pontuação
+• ✅ Combina com outros filtros automaticamente
+• ✅ Busca fuzzy tolera pequenos erros de digitação
+
+📌 EXEMPLOS PRÁTICOS:
+• "1234" → encontra CPFs terminados em 1234
+• "ACD-001" → encontra acionamento específico
+• "1000" → encontra valores próximos a R$ 1.000
+• "Wesly" → encontra "Wesley" (tolerância a erros)
+• "SENAC" → encontra todos da carteira SENAC
+• "João" → busca em nomes, empresas, observações
+
+⚡ A busca é inteligente e rápida - apenas digite e veja os resultados!
+"""
         
         texto.insert('1.0', conteudo)
         texto.config(state='disabled')

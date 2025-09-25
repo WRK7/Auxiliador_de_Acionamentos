@@ -280,18 +280,23 @@ class AcionamentoApp:
         
         # Adicionar placeholder para campos de data
         if campo in ["Data de Vencimento", "Data de Pagamento"]:
-            entry.insert(0, "DD/MM/AAAA")
+            if campo == "Data de Vencimento":
+                placeholder_text = "Ex: 26/09/2025"
+            else:
+                placeholder_text = "DD/MM/AAAA"
+            
+            entry.insert(0, placeholder_text)
             entry.config(fg=DARK_THEME['text_muted'])
             
             # Função para gerenciar placeholder
             def on_focus_in(event):
-                if entry.get() == "DD/MM/AAAA":
+                if entry.get() == placeholder_text:
                     entry.delete(0, tk.END)
                     entry.config(fg=DARK_THEME['text_primary'])
             
             def on_focus_out(event):
                 if not entry.get().strip():
-                    entry.insert(0, "DD/MM/AAAA")
+                    entry.insert(0, placeholder_text)
                     entry.config(fg=DARK_THEME['text_muted'])
             
             entry.bind('<FocusIn>', on_focus_in)

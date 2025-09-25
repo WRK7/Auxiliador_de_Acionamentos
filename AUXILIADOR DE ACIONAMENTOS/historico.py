@@ -157,11 +157,9 @@ class HistoricoManager:
                     if data_acionamento > data_fim:
                         incluir = False
             
-            # Filtro por texto (busca em nome do devedor)
+            # Filtro por texto (busca avançada inteligente)
             if filtros.get('texto'):
-                texto_busca = filtros['texto'].lower()
-                nome_devedor = acionamento['informacoes'].get('Nome do Devedor', '').lower()
-                if texto_busca not in nome_devedor:
+                if not self._busca_avancada_match(acionamento, filtros['texto']):
                     incluir = False
             
             # Filtro por valor mínimo
@@ -323,3 +321,240 @@ class HistoricoManager:
         except Exception as e:
             print(f"Erro ao obter lista de backups: {e}")
             return []
+    
+    def _busca_avancada_match(self, acionamento, texto_busca):
+        """Busca avançada inteligente em múltiplos campos"""
+        import re
+        from difflib import SequenceMatcher
+        
+        # Normalizar texto de busca
+        texto_busca = texto_busca.strip().lower()
+        
+        if not texto_busca:
+            return True
+        
+        # 1. BUSCA POR ID DO ACIONAMENTO
+        if self._eh_busca_por_id(texto_busca):
+            return self._buscar_por_id(acionamento, texto_busca)
+        
+        # 2. BUSCA POR CPF/CNPJ (PARCIAL OU COMPLETO)
+        if self._eh_busca_por_cpf(texto_busca):
+            return self._buscar_por_cpf(acionamento, texto_busca)
+        
+        # 3. BUSCA POR VALOR APROXIMADO
+        if self._eh_busca_por_valor(texto_busca):
+            return self._buscar_por_valor(acionamento, texto_busca)
+        
+        # 4. BUSCA TEXTUAL EM MÚLTIPLOS CAMPOS
+        return self._buscar_em_campos_texto(acionamento, texto_busca)
+    
+    def _eh_busca_por_id(self, texto):
+        """Detecta se é busca por ID (formato: ABC-2025-001)"""
+        import re
+        # Padrões: "ACD-2025-001", "ACD-001", "2025-001", etc.
+        padroes_id = [
+            r'^[A-Z]{2,4}-\d{4}-\d{3}$',  # Formato completo
+            r'^[A-Z]{2,4}-\d{3}$',        # Sem ano
+            r'^\d{4}-\d{3}$',             # Sem prefixo
+            r'^[A-Z]{2,4}-\d{4}$'         # Sem número
+        ]
+        
+        for padrao in padroes_id:
+            if re.match(padrao, texto.upper()):
+                return True
+        return False
+    
+    def _buscar_por_id(self, acionamento, texto_busca):
+        """Busca por ID do acionamento"""
+        id_acionamento = acionamento['id'].lower()
+        texto_busca = texto_busca.lower()
+        
+        # Busca exata
+        if texto_busca == id_acionamento:
+            return True
+        
+        # Busca parcial (qualquer parte do ID)
+        if texto_busca in id_acionamento:
+            return True
+        
+        # Busca por componentes (ACD, 2025, 001)
+        componentes_busca = texto_busca.upper().replace('-', ' ').split()
+        componentes_id = id_acionamento.upper().replace('-', ' ').split()
+        
+        for comp_busca in componentes_busca:
+            encontrou = False
+            for comp_id in componentes_id:
+                if comp_busca in comp_id:
+                    encontrou = True
+                    break
+            if not encontrou:
+                return False
+        
+        return True
+    
+    def _eh_busca_por_cpf(self, texto):
+        """Detecta se é busca por CPF/CNPJ"""
+        import re
+        # Remove formatação
+        numeros = re.sub(r'[^0-9]', '', texto)
+        
+        # Se tem apenas números e pelo menos 3 dígitos, pode ser CPF
+        if len(numeros) >= 3 and len(numeros) <= 14:
+            return True
+        
+        # Se tem formato de CPF/CNPJ
+        if re.match(r'[\d.-/]+', texto) and len(numeros) >= 3:
+            return True
+        
+        return False
+    
+    def _buscar_por_cpf(self, acionamento, texto_busca):
+        """Busca por CPF/CNPJ (parcial ou completo)"""
+        import re
+        
+        cpf_acionamento = acionamento['informacoes'].get('CPF/CNPJ', '')
+        
+        # Extrair apenas números de ambos
+        numeros_busca = re.sub(r'[^0-9]', '', texto_busca)
+        numeros_cpf = re.sub(r'[^0-9]', '', cpf_acionamento)
+        
+        if not numeros_cpf:
+            return False
+        
+        # Busca exata
+        if numeros_busca == numeros_cpf:
+            return True
+        
+        # Busca parcial (útil para últimos dígitos)
+        if numeros_busca in numeros_cpf:
+            return True
+        
+        # Busca por formato (com pontos e hífens)
+        if texto_busca.lower() in cpf_acionamento.lower():
+            return True
+        
+        return False
+    
+    def _eh_busca_por_valor(self, texto):
+        """Detecta se é busca por valor monetário"""
+        import re
+        
+        # Se contém R$ ou apenas números com vírgulas/pontos
+        if 'r$' in texto.lower() or re.match(r'^[\d.,]+$', texto):
+            return True
+        
+        # Se parece com valor (números seguidos de vírgula/ponto)
+        if re.match(r'^\d+[.,]\d+$', texto):
+            return True
+        
+        return False
+    
+    def _buscar_por_valor(self, acionamento, texto_busca):
+        """Busca por valor aproximado (±10%)"""
+        import re
+        
+        # Extrair valor numérico da busca
+        try:
+            valor_busca_str = re.sub(r'[^\d,.]', '', texto_busca)
+            valor_busca = float(valor_busca_str.replace(',', '.').replace('..', '.'))
+        except (ValueError, TypeError):
+            return False
+        
+        # Margem de 10% para valores aproximados
+        margem = valor_busca * 0.1
+        valor_min = valor_busca - margem
+        valor_max = valor_busca + margem
+        
+        # Buscar em campos de valor
+        campos_valor = [
+            'Valor da Dívida', 'Valor Total Atualizado', 'Valor Proposto',
+            'Valor Confirmado', 'Valor Total Negociado', 'Total da Dívida'
+        ]
+        
+        for campo in campos_valor:
+            valor_campo = acionamento['informacoes'].get(campo, '')
+            if valor_campo:
+                try:
+                    # Extrair valor numérico do campo
+                    valor_numerico_str = re.sub(r'[^\d,.]', '', valor_campo)
+                    if valor_numerico_str:
+                        valor_numerico = float(valor_numerico_str.replace(',', '.').replace('..', '.'))
+                        
+                        # Verificar se está na faixa
+                        if valor_min <= valor_numerico <= valor_max:
+                            return True
+                except (ValueError, TypeError):
+                    continue
+        
+        return False
+    
+    def _buscar_em_campos_texto(self, acionamento, texto_busca):
+        """Busca textual em múltiplos campos com busca fuzzy"""
+        from difflib import SequenceMatcher
+        
+        # Campos para busca textual
+        campos_busca = [
+            'Nome do Devedor', 'Empresa', 'Cliente', 'Contratante', 'Titular',
+            'Observações', 'Telefone', 'E-mail', 'WhatsApp', 'Email'
+        ]
+        
+        for campo in campos_busca:
+            valor_campo = acionamento['informacoes'].get(campo, '').lower()
+            
+            if not valor_campo:
+                continue
+            
+            # 1. Busca exata
+            if texto_busca in valor_campo:
+                return True
+            
+            # 2. Busca fuzzy (tolerante a erros)
+            if self._busca_fuzzy_match(texto_busca, valor_campo):
+                return True
+            
+            # 3. Busca por palavras individuais
+            palavras_busca = texto_busca.split()
+            if len(palavras_busca) > 1:
+                todas_encontradas = True
+                for palavra in palavras_busca:
+                    if len(palavra) >= 2 and palavra not in valor_campo:
+                        todas_encontradas = False
+                        break
+                if todas_encontradas:
+                    return True
+        
+        # Buscar também na carteira e tipo
+        carteira = acionamento.get('carteira', '').lower()
+        tipo = acionamento.get('tipo', '').lower()
+        
+        if texto_busca in carteira or texto_busca in tipo:
+            return True
+        
+        return False
+    
+    def _busca_fuzzy_match(self, texto_busca, texto_campo, threshold=0.8):
+        """Busca fuzzy com tolerância a erros de digitação"""
+        from difflib import SequenceMatcher
+        
+        # Para textos muito curtos, ser mais rigoroso
+        if len(texto_busca) <= 3:
+            threshold = 0.9
+        
+        # Calcular similaridade
+        similarity = SequenceMatcher(None, texto_busca, texto_campo).ratio()
+        
+        if similarity >= threshold:
+            return True
+        
+        # Busca fuzzy por palavras individuais
+        palavras_busca = texto_busca.split()
+        palavras_campo = texto_campo.split()
+        
+        for palavra_busca in palavras_busca:
+            if len(palavra_busca) >= 3:  # Só palavras com 3+ caracteres
+                for palavra_campo in palavras_campo:
+                    similarity = SequenceMatcher(None, palavra_busca, palavra_campo).ratio()
+                    if similarity >= threshold:
+                        return True
+        
+        return False
