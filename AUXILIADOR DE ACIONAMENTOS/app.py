@@ -237,8 +237,8 @@ class AcionamentoApp:
         
         # Cores específicas por tipo de campo
         if campo == "Data de Vencimento":
-            bg_color = '#2d4a2d'  # Verde escuro para data
-            fg_color = '#90EE90'  # Verde claro para texto
+            bg_color = DARK_THEME['surface']  # Cor padrão para data
+            fg_color = DARK_THEME['text_primary']  # Cor padrão para texto
         elif campo == "Desconto Principal":
             bg_color = '#4a2d2d'  # Vermelho escuro para principal
             fg_color = '#FFB6C1'  # Rosa claro para texto
@@ -295,8 +295,7 @@ class AcionamentoApp:
                     entry.config(fg=DARK_THEME['text_primary'])
             
             def on_focus_out(event):
-                if not entry.get().strip() or entry.get() == placeholder_text:
-                    entry.delete(0, tk.END)
+                if not entry.get().strip():
                     entry.insert(0, placeholder_text)
                     entry.config(fg=DARK_THEME['text_muted'])
             
