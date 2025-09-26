@@ -14,6 +14,17 @@ class FieldValidators:
         self.carteira_var = carteira_var
     
     def aplicar_formatacao_automatica(self, campo, valor):
+        """Aplica formatação automática para campos monetários"""
+        if self._eh_campo_monetario(campo) and valor.strip():
+            # Se já tem R$, não formata novamente
+            if valor.strip().startswith('R$'):
+                return valor
+            
+            # Remove formatação existente e adiciona R$
+            valor_limpo = re.sub(r'[^\d,.]', '', valor)
+            if valor_limpo:
+                return f"R$ {valor_limpo}"
+        
         return valor
     
     def validar_campo(self, campo, valor):
@@ -247,3 +258,16 @@ class FieldValidators:
                 return True, "Data válida"
         except ValueError:
             return False, "Data inválida"
+    
+    def _eh_campo_monetario(self, campo):
+        """Verifica se o campo é um campo de valor monetário"""
+        campos_monetarios = [
+            "Valor da Dívida", "Valor Total Atualizado", "Valor Proposto", 
+            "Valor Confirmado", "Valor Total Negociado", "Valor Original", 
+            "Valor Débito Original", "Valor Debito Original", "Valor Negociado", 
+            "Valor Total", "Total da Dívida", "Valor das Parcelas", 
+            "Valor de Cada Parcela", "Valor da Parcela", "Valor da Parcelas",
+            "Entrada de", "Valor de Entrada", "Entrada (Boleto)", 
+            "Entrada Negociação", "Valor da Entrada"
+        ]
+        return campo in campos_monetarios

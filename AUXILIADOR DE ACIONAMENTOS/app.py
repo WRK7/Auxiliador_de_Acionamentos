@@ -214,7 +214,7 @@ class AcionamentoApp:
         elif campo == "E-mail":
             label_color = '#96CEB4'  # Verde para E-mail
         elif campo == "Data de Vencimento":
-            label_color = '#98D8C8'  # Verde para data
+            label_color = DARK_THEME['text_primary']  # Cor padrão para data
         elif campo in ["Valor da Dívida", "Valor Total Atualizado", "Valor Proposto", "Valor Confirmado", 
                       "Valor Total Negociado", "Valor Original", "Valor Débito Original", 
                       "Valor Debito Original", "Valor Negociado", "Valor Total", "Total da Dívida"]:
@@ -295,7 +295,8 @@ class AcionamentoApp:
                     entry.config(fg=DARK_THEME['text_primary'])
             
             def on_focus_out(event):
-                if not entry.get().strip():
+                if not entry.get().strip() or entry.get() == placeholder_text:
+                    entry.delete(0, tk.END)
                     entry.insert(0, placeholder_text)
                     entry.config(fg=DARK_THEME['text_muted'])
             

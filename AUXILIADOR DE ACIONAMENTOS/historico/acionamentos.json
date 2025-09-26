@@ -252,5 +252,29 @@
     "usuario": "wesley.cruz",
     "computador": "PCportesconx",
     "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-011",
+    "data_criacao": "26/09/2025 07:22:22",
+    "carteira": "SENAC RJ",
+    "tipo": "ACD - ACORDO",
+    "informacoes": {
+      "Nome do Devedor": "",
+      "CPF/CNPJ": "",
+      "Valor Total Atualizado": "",
+      "Desconto Principal": "",
+      "Desconto Juros": "",
+      "Desconto Multa": "",
+      "Valor Proposto": "",
+      "Data de Vencimento": "",
+      "Forma de Pagamento": "",
+      "WhatsApp": "",
+      "E-mail": "",
+      "Observações": ""
+    },
+    "modelo_gerado": "=== ACIONAMENTO - ACD - ACORDO ===\nCarteira: SENAC RJ\nData: 26/09/2025",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
   }
 ]

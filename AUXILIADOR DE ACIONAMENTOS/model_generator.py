@@ -47,6 +47,7 @@ class ModelGenerator:
             if self._eh_campo_porcentagem(campo) and valor:
                 if not self._validar_porcentagem_basica(valor):
                     campos_invalidos.append(f"{campo} (porcentagem inválida)")
+            
         
         # Bloquear se CPF/CNPJ, Data de Vencimento ou Porcentagens inválidos
         if campos_invalidos:
@@ -174,3 +175,4 @@ Data: {data_atual}
             return 0 <= valor_float <= 100  # Valores entre 0 e 100%
         except ValueError:
             return False
+    
