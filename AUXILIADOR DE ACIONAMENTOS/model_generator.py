@@ -29,18 +29,18 @@ class ModelGenerator:
             valor = entry.get().strip()
             
             # Ignorar placeholder na coleta de dados
-            if campo == "Data de Vencimento" and valor in ["DD/MM/AAAA", "Ex: 26/09/2025"]:
+            if campo in ["Data de Vencimento", "Vencimento Acordo"] and valor in ["DD/MM/AAAA", "Ex: 26/09/2025"]:
                 valor = ""
             
             informacoes[campo] = valor
             
             # Validar CPF/CNPJ, Data de Vencimento e Porcentagens - bloquear se inválidos
-            if campo in ["CPF/CNPJ", "Data de Vencimento"] and valor:
+            if campo in ["CPF/CNPJ", "Data de Vencimento", "Vencimento Acordo"] and valor:
                 if not self._validar_campo_basico(campo, valor, carteira_var):
                     if campo == "CPF/CNPJ":
                         tipo_doc = Validator.obter_tipo_documento(valor)
                         campos_invalidos.append(f"{campo} ({tipo_doc} inválido)")
-                    elif campo == "Data de Vencimento":
+                    elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
                         campos_invalidos.append(f"{campo} (data inválida ou fora do prazo)")
             
             # Validar campos de porcentagem
@@ -48,8 +48,12 @@ class ModelGenerator:
                 if not self._validar_porcentagem_basica(valor):
                     campos_invalidos.append(f"{campo} (porcentagem inválida)")
             
+            # Validar campos obrigatórios
+            if self._eh_campo_obrigatorio(campo) and not valor.strip():
+                campos_invalidos.append(f"{campo} (campo obrigatório)")
+            
         
-        # Bloquear se CPF/CNPJ, Data de Vencimento ou Porcentagens inválidos
+        # Bloquear se CPF/CNPJ, Data de Vencimento, Vencimento Acordo, Porcentagens ou campos obrigatórios inválidos
         if campos_invalidos:
             mensagem = "Por favor, corrija os seguintes campos:\n\n" + "\n".join(f"• {campo}" for campo in campos_invalidos)
             texto_modelo.delete(1.0, 'end')
@@ -77,7 +81,7 @@ class ModelGenerator:
             elif len(numeros) == 14:
                 return Validator.validar_cnpj(valor)
             return False
-        elif campo == "Data de Vencimento":
+        elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
             carteira_atual = carteira_var.get()
             if carteira_atual:
                 valido, mensagem = Validator.validar_data_vencimento(valor, carteira_atual, PRAZO_MAXIMO_POR_CARTEIRA)
@@ -90,22 +94,65 @@ class ModelGenerator:
         return True
     
     def criar_modelo_acionamento(self, carteira, tipo, informacoes):
-        """Cria o modelo específico baseado no tipo de acionamento"""
-        data_atual = datetime.now().strftime("%d/%m/%Y")
+        """Cria o modelo específico baseado no tipo de acionamento usando templates"""
+        from config import MODELOS_ACIONAMENTO
         
-        modelo = f"""
+        # Verificar se existe template para este tipo
+        if tipo in MODELOS_ACIONAMENTO:
+            # Usar template do config.py
+            template = MODELOS_ACIONAMENTO[tipo]
+            
+            # Processar descontos em uma linha única
+            descontos_linha = self._formatar_descontos_linha_unica(informacoes)
+            
+            # Preparar dados para substituição no template
+            dados_template = informacoes.copy()
+            
+            # Substituir campos de desconto individuais pela linha única
+            if descontos_linha:
+                dados_template["Desconto Principal"] = descontos_linha
+                dados_template["Desconto Juros"] = ""  # Limpar campos individuais
+                dados_template["Desconto Multa"] = ""
+            else:
+                # Se não há descontos, limpar todos os campos
+                dados_template["Desconto Principal"] = ""
+                dados_template["Desconto Juros"] = ""
+                dados_template["Desconto Multa"] = ""
+            
+            # Substituir placeholders no template
+            try:
+                modelo = template.format(**dados_template)
+                return modelo.strip()
+            except KeyError as e:
+                # Se algum campo não existir no template, usar fallback
+                return f"Erro no template: campo {e} não encontrado"
+        else:
+            # Fallback para tipos não definidos
+            data_atual = datetime.now().strftime("%d/%m/%Y")
+            
+            modelo = f"""
 === ACIONAMENTO - {tipo} ===
 Carteira: {carteira}
 Data: {data_atual}
 
 """
-        
-        # Adicionar apenas informações preenchidas (sem duplicação)
-        for campo, valor in informacoes.items():
-            if valor:  # Só adicionar campos que têm valor
-                modelo += f"{campo}: {valor}\n"
-        
-        return modelo.strip()
+            
+            # Processar descontos em uma linha única
+            descontos_linha = self._formatar_descontos_linha_unica(informacoes)
+            
+            # Adicionar apenas informações preenchidas (sem duplicação)
+            for campo, valor in informacoes.items():
+                if valor:  # Só adicionar campos que têm valor
+                    # Pular campos de desconto individuais (já foram processados)
+                    if campo in ["Desconto Principal", "Desconto Juros", "Desconto Multa"]:
+                        continue
+                    modelo += f"{campo}: {valor}\n"
+            
+            # Adicionar linha de descontos se houver
+            if descontos_linha:
+                modelo += f"Descontos: {descontos_linha}\n"
+            
+            return modelo.strip()
     
     def copiar_modelo(self, texto_modelo):
         """Copia apenas os dados preenchidos para a área de transferência"""
@@ -144,8 +191,47 @@ Data: {data_atual}
         ]
         return campo in campos_porcentagem
     
+    def _eh_campo_obrigatorio(self, campo):
+        """Verifica se o campo é obrigatório (todos exceto WhatsApp, E-mail e Observações)"""
+        campos_opcionais = ["WhatsApp", "E-mail", "Observações"]
+        return campo not in campos_opcionais
+    
+    def _formatar_descontos_linha_unica(self, informacoes):
+        """Formata os descontos em uma linha única: '34% PRINCIPAL 100% JUROS 23% MULTA'"""
+        descontos = []
+        
+        # Processar cada tipo de desconto
+        if informacoes.get("Desconto Principal", "").strip():
+            valor_principal = self._limpar_porcentagem(informacoes["Desconto Principal"])
+            descontos.append(f"{valor_principal}% PRINCIPAL")
+        
+        if informacoes.get("Desconto Juros", "").strip():
+            valor_juros = self._limpar_porcentagem(informacoes["Desconto Juros"])
+            descontos.append(f"{valor_juros}% JUROS")
+        
+        if informacoes.get("Desconto Multa", "").strip():
+            valor_multa = self._limpar_porcentagem(informacoes["Desconto Multa"])
+            descontos.append(f"{valor_multa}% MULTA")
+        
+        return " ".join(descontos)
+    
+    def _limpar_porcentagem(self, valor):
+        """Remove formatação da porcentagem e retorna apenas o número"""
+        import re
+        if not valor:
+            return ""
+        
+        # Remove % e espaços, mantém apenas números e vírgula
+        valor_limpo = re.sub(r'[^\d,]', '', valor)
+        
+        # Se tem vírgula, converte para ponto para normalizar
+        if ',' in valor_limpo:
+            valor_limpo = valor_limpo.replace(',', '.')
+        
+        return valor_limpo
+    
     def _validar_porcentagem_basica(self, valor):
-        """Validação básica de porcentagem"""
+        """Validação básica de porcentagem - bloqueia letras e valores negativos"""
         import re
         if not valor.strip():
             return True  # Campo vazio é válido
@@ -156,7 +242,7 @@ Data: {data_atual}
         if not valor_limpo:
             return False
         
-        # Verificar se tem apenas números e vírgulas
+        # Verificar se tem apenas números e vírgulas (bloqueia letras)
         if not re.match(r'^[\d,]+$', valor_limpo):
             return False
         
@@ -172,7 +258,8 @@ Data: {data_atual}
         try:
             # Substituir vírgula por ponto para conversão
             valor_float = float(valor_limpo.replace(',', '.'))
-            return 0 <= valor_float <= 100  # Valores entre 0 e 100%
+            # Bloqueia valores negativos e acima de 100%
+            return 0 <= valor_float <= 100
         except ValueError:
             return False
     

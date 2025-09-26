@@ -268,15 +268,23 @@ class HistoricoUI:
         
         print(f"🔍 DEBUG: Carregando {len(historico)} registros no histórico")
         
-        # Atualizar combos
-        carteiras = list(set([a['carteira'] for a in historico]))
-        carteiras.sort()
+        # Atualizar combos com carteiras e tipos configurados no sistema
+        from config import CARTEIRAS, TIPOS_POR_CARTEIRA
+        
+        # Carteiras do sistema
+        carteiras = CARTEIRAS.copy()
         carteiras.insert(0, "Todas")
         self.combo_carteira['values'] = carteiras
         self.combo_carteira.set("Todas")
         
-        tipos = list(set([a['tipo'].split(' - ')[0] for a in historico]))
-        tipos.sort()
+        # Tipos do sistema (apenas a parte principal, sem subdivisões)
+        todos_tipos = set()
+        for tipos_carteira in TIPOS_POR_CARTEIRA.values():
+            for tipo in tipos_carteira:
+                # Extrair apenas a parte principal (antes do " - ")
+                tipo_principal = tipo.split(' - ')[0]
+                todos_tipos.add(tipo_principal)
+        tipos = sorted(list(todos_tipos))
         tipos.insert(0, "Todos")
         self.combo_tipo['values'] = tipos
         self.combo_tipo.set("Todos")

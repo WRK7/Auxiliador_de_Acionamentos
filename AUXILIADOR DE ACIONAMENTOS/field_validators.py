@@ -3,6 +3,7 @@ Módulo de validação de campos e formatação automática
 """
 
 import re
+import tkinter as tk
 from validators import Validator
 from config import CAMPOS_OBRIGATORIOS, FORMATACAO_AUTOMATICA, PRAZO_MAXIMO_POR_CARTEIRA
 from theme import DARK_THEME
@@ -14,7 +15,7 @@ class FieldValidators:
         self.carteira_var = carteira_var
     
     def aplicar_formatacao_automatica(self, campo, valor):
-        """Aplica formatação automática para campos monetários"""
+        """Aplica formatação automática para campos monetários e porcentagens"""
         if self._eh_campo_monetario(campo) and valor.strip():
             # Se já tem R$, não formata novamente
             if valor.strip().startswith('R$'):
@@ -25,31 +26,49 @@ class FieldValidators:
             if valor_limpo:
                 return f"R$ {valor_limpo}"
         
+        elif self._eh_campo_porcentagem(campo) and valor.strip():
+            # Se já tem %, não formata novamente
+            if valor.strip().endswith('%'):
+                return valor
+            
+            # Remove formatação existente e adiciona %
+            valor_limpo = re.sub(r'[^\d,]', '', valor)
+            if valor_limpo:
+                return f"{valor_limpo}%"
+        
         return valor
     
     def validar_campo(self, campo, valor):
-        """Valida CPF/CNPJ, Data de Vencimento e Porcentagens, outros campos sempre válidos"""
+        """Valida CPF/CNPJ, Data de Vencimento, Porcentagens e campos obrigatórios"""
+        # Verificar se é campo obrigatório
+        if self._eh_campo_obrigatorio(campo) and not valor.strip():
+            return False  # Campo obrigatório vazio é inválido
+        
         if campo == "CPF/CNPJ":
             if not valor.strip():
-                return True  # Campo vazio é válido
+                return True  # Campo vazio é válido (não obrigatório)
             numeros = re.sub(r'[^0-9]', '', valor)
             if len(numeros) == 11:
                 return Validator.validar_cpf(valor)
             elif len(numeros) == 14:
                 return Validator.validar_cnpj(valor)
             return False  # Tamanho inválido
-        elif campo == "Data de Vencimento":
+        elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
             if not valor.strip():
-                return True  # Campo vazio é válido
+                return True  # Campo vazio é válido (não obrigatório)
             return self._validar_data_vencimento(valor)
         elif self._eh_campo_porcentagem(campo):
             if not valor.strip():
-                return True  # Campo vazio é válido
+                return True  # Campo vazio é válido (não obrigatório)
             return self._validar_porcentagem(valor)
         return True
     
     def validar_campo_com_mensagem(self, campo, valor):
-        """Valida CPF/CNPJ, Data de Vencimento e Porcentagens, outros campos sempre válidos"""
+        """Valida CPF/CNPJ, Data de Vencimento, Porcentagens e campos obrigatórios"""
+        # Verificar se é campo obrigatório
+        if self._eh_campo_obrigatorio(campo) and not valor.strip():
+            return False, "Campo obrigatório"
+        
         if campo == "CPF/CNPJ":
             if not valor.strip():
                 return True, "Campo vazio"
@@ -62,7 +81,7 @@ class FieldValidators:
                 return (valido, "CNPJ válido" if valido else "CNPJ inválido")
             else:
                 return False, f"Documento deve ter 11 (CPF) ou 14 (CNPJ) dígitos. Atual: {len(numeros)}"
-        elif campo == "Data de Vencimento":
+        elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
             if not valor.strip():
                 return True, "Campo vazio"
             return self._validar_data_vencimento_com_mensagem(valor)
@@ -73,6 +92,22 @@ class FieldValidators:
         return True, "Campo válido"
     
     def limitar_entrada(self, campo, event):
+        """Limita entrada de dados para campos específicos"""
+        if self._eh_campo_porcentagem(campo):
+            # Permitir teclas de controle (Backspace, Delete, setas, etc.)
+            if event.keysym in ['BackSpace', 'Delete', 'Left', 'Right', 'Home', 'End', 'Tab']:
+                return None
+            
+            # Para campos de porcentagem, bloquear letras e caracteres especiais
+            if event.char and not event.char.isdigit() and event.char not in [',', '%', '.']:
+                return 'break'  # Bloqueia a tecla
+            
+            # Converter ponto para vírgula automaticamente
+            if event.char == '.':
+                # Simula a digitação de vírgula em vez de ponto
+                event.widget.insert(tk.INSERT, ',')
+                return 'break'  # Bloqueia o ponto original
+        
         return None
     
     def _eh_campo_valor(self, campo):
@@ -175,7 +210,7 @@ class FieldValidators:
         return True, "Valor válido"
     
     def _validar_porcentagem(self, valor):
-        """Valida se o valor de porcentagem é válido"""
+        """Valida valor de porcentagem - bloqueia letras e valores negativos"""
         if not valor.strip():
             return True  # Campo vazio é válido (não obrigatório)
         
@@ -185,7 +220,7 @@ class FieldValidators:
         if not valor_limpo:
             return False
         
-        # Verificar se tem apenas números e vírgulas
+        # Verificar se tem apenas números e vírgulas (bloqueia letras)
         if not re.match(r'^[\d,]+$', valor_limpo):
             return False
         
@@ -201,7 +236,8 @@ class FieldValidators:
         try:
             # Substituir vírgula por ponto para conversão
             valor_float = float(valor_limpo.replace(',', '.'))
-            return 0 <= valor_float <= 100  # Valores entre 0 e 100%
+            # Bloqueia valores negativos e acima de 100%
+            return 0 <= valor_float <= 100
         except ValueError:
             return False
     
@@ -211,7 +247,7 @@ class FieldValidators:
             return True, "Campo vazio"
         
         if not self._validar_porcentagem(valor):
-            return False, "Formato inválido (ex: 15,50 ou 15)"
+            return False, "Formato inválido (ex: 15,50% ou 15%)"
         
         return True, "Porcentagem válida"
     
@@ -271,3 +307,8 @@ class FieldValidators:
             "Entrada Negociação", "Valor da Entrada"
         ]
         return campo in campos_monetarios
+    
+    def _eh_campo_obrigatorio(self, campo):
+        """Verifica se o campo é obrigatório (todos exceto WhatsApp, E-mail e Observações)"""
+        campos_opcionais = ["Observações"]
+        return campo not in campos_opcionais
