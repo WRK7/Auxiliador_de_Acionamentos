@@ -879,7 +879,20 @@ ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """,
     
-    "ACD - ACORDO": """
+    "SENAC RJ - ACD - ACORDO": """
+SENAC RJ - ACD - ACORDO:
+
+NOME: {Nome do Devedor}
+CPF: {CPF/CNPJ}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+VALOR PROPOSTO: {Valor Proposto}
+VENCIMENTO: {Data de Vencimento}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
+OBS: {Observações}
+""",
+    
+    "LIBERDADE MÉDICA - ACD - ACORDO": """
 LIBERDADE MÉDICA: ACD - ACORDO:
 
 NOME: {Nome do Devedor}
@@ -889,6 +902,64 @@ DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
+OBS: {Observações}
+""",
+    
+    "ÓTICA DINIZ - ACD - ACORDO": """
+ÓTICA DINIZ: ACD - ACORDO:
+
+NOME: {Nome do Devedor}
+CPF: {CPF/CNPJ}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+VALOR PROPOSTO: {Valor Proposto}
+VENCIMENTO: {Data de Vencimento}
+FORMA DE PAGAMENTO: {Forma de Pagamento}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
+OBS: {Observações}
+""",
+    
+    "UNIMED - ACD - ACORDO": """
+UNIMED: ACD - ACORDO:
+
+CONTRATANTE: {Contratante}
+CPF/CNPJ: {CPF/CNPJ}
+FATURAS A PAGAR: {Faturas a Pagar}
+TÍTULOS: {Títulos}
+DIAS EM ATRASO: {Dias em Atraso}
+FORMA DE PAGAMENTO: {Forma de Pagamento}
+DATA DE PAGAMENTO: {Data de Pagamento}
+VALOR ORIGINAL: {Valor Original}
+VALOR ATUALIZADO: {Valor Atualizado}
+TELEFONE: {Telefone}
+FORMA DE ENVIO: {Forma de Envio}
+""",
+    
+    "FIEB - ACD - PIX/DÉBITO/CRÉDITO": """
+FIEB: PIX, DÉBITO OU CRÉDITO EM 12X (ACD – ACORDO):
+
+NOME: {Nome do Devedor}
+CPF: {CPF/CNPJ}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+VALOR PROPOSTO: {Valor Proposto}
+VENCIMENTO: {Data de Vencimento}
+FORMA DE PAGAMENTO: {Forma de Pagamento}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
+OBS: {Observações}
+""",
+    
+    "FIEB - ACD - BOLETO": """
+FIEB: BOLETO (ACD – ACORDO):
+
+NOME: {Nome do Devedor}
+CPF: {CPF/CNPJ}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+VALOR PROPOSTO: {Valor Proposto}
+VENCIMENTO: {Data de Vencimento}
+FORMA DE PAGAMENTO: BOLETO
 ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """

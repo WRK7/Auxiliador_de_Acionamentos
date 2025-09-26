@@ -1,0 +1,73 @@
+===============================================
+    AUXILIADOR DE ACIONAMENTOS - INSTALAÇÃO
+===============================================
+
+📋 PRÉ-REQUISITOS:
+- Python 3.8 ou superior instalado
+- Conexão com internet (apenas na primeira instalação)
+
+🚀 INSTALAÇÃO RÁPIDA:
+
+1. Abra o Prompt de Comando (CMD) como Administrador
+2. Navegue até a pasta do programa:
+   cd "C:\caminho\para\Auxiliador_Acionamentos_Portavel"
+
+3. Instale as dependências:
+   pip install -r requirements.txt
+
+4. Execute o programa:
+   python main.py
+
+===============================================
+    INSTALAÇÃO EM OUTRAS MÁQUINAS
+===============================================
+
+1. Copie toda a pasta "Auxiliador_Acionamentos_Portavel" para a máquina destino
+2. Siga os passos da "INSTALAÇÃO RÁPIDA" acima
+
+===============================================
+    ARQUIVOS IMPORTANTES
+===============================================
+
+📁 Estrutura do programa:
+├── main.py                    # Arquivo principal
+├── app.py                     # Interface gráfica
+├── config.py                  # Configurações
+├── validators.py              # Validações
+├── field_validators.py        # Validações de campos
+├── model_generator.py         # Geração de modelos
+├── historico.py               # Gerenciamento do histórico
+├── historico_ui.py            # Interface do histórico
+├── theme.py                   # Tema visual
+├── ui_components.py           # Componentes da UI
+├── requirements.txt           # Dependências
+└── historico/                 # Pasta do histórico
+    ├── acionamentos.json      # Dados do histórico
+    └── contador.json          # Contador de IDs
+
+===============================================
+    SOLUÇÃO DE PROBLEMAS
+===============================================
+
+❌ Erro: "ModuleNotFoundError"
+   → Execute: pip install -r requirements.txt
+
+❌ Erro: "Permission denied"
+   → Execute o CMD como Administrador
+
+❌ Erro: "Python not found"
+   → Instale Python 3.8+ do site oficial
+
+❌ Programa não abre
+   → Verifique se todos os arquivos estão na pasta
+
+===============================================
+    SUPORTE
+===============================================
+
+Para suporte técnico, entre em contato com:
+- Desenvolvedor: Wesley Cruz
+- Data: 26/09/2025
+- Versão: 1.0
+
+===============================================
