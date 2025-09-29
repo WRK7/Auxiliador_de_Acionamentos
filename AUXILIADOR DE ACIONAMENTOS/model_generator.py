@@ -151,13 +151,14 @@ Data: {data_atual}
             dados_template["Desconto Juros"] = ""
             dados_template["Desconto Multa"] = ""
         
-        # Substituir placeholders no template
-        try:
-            modelo = template.format(**dados_template)
-            return modelo.strip()
-        except KeyError as e:
-            # Se algum campo não existir no template, usar fallback
-            return f"Erro no template: campo {e} não encontrado"
+        # Substituir placeholders no template com fallback vazio para campos ausentes
+        import re
+        chaves = set(re.findall(r"\{([^}]+)\}", template))
+        for chave in chaves:
+            if chave not in dados_template:
+                dados_template[chave] = ""
+        modelo = template.format(**dados_template)
+        return modelo.strip()
     
     def copiar_modelo(self, texto_modelo):
         """Copia apenas os dados preenchidos para a área de transferência"""

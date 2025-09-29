@@ -1,6 +1,7 @@
 # Sistema de Histórico para o Gerador de Acionamentos
 import json
 import os
+import sys
 from datetime import datetime
 import getpass
 import socket
@@ -9,9 +10,16 @@ class HistoricoManager:
     """Gerenciador do histórico de acionamentos"""
     
     def __init__(self, pasta_historico="historico"):
-        self.pasta_historico = pasta_historico
-        self.arquivo_historico = os.path.join(pasta_historico, "acionamentos.json")
-        self.arquivo_contador = os.path.join(pasta_historico, "contador.json")
+        # Resolver pasta base ao lado do executável quando congelado (PyInstaller)
+        if getattr(sys, 'frozen', False):
+            base_dir = os.path.dirname(sys.executable)
+        else:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Sempre usar a pasta de histórico ao lado do app/exe
+        self.pasta_historico = os.path.join(base_dir, pasta_historico)
+        self.arquivo_historico = os.path.join(self.pasta_historico, "acionamentos.json")
+        self.arquivo_contador = os.path.join(self.pasta_historico, "contador.json")
         
         # Criar estrutura de pastas organizadas
         self.criar_estrutura_pastas()

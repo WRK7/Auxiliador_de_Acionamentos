@@ -1310,5 +1310,56 @@
     "usuario": "wesley.cruz",
     "computador": "PCportesconx",
     "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-053",
+    "data_criacao": "29/09/2025 07:13:15",
+    "carteira": "SENAC RJ",
+    "tipo": "ACD - ACORDO",
+    "informacoes": {
+      "Nome do Devedor": "wesley",
+      "CPF/CNPJ": "09198820133",
+      "Valor Total Atualizado": "R$ 1234",
+      "Desconto Principal": "12%",
+      "Desconto Juros": "24%",
+      "Desconto Multa": "32%",
+      "Valor Proposto": "R$ 1234",
+      "Data de Vencimento": "29/09/2025",
+      "Forma de Pagamento": "wes",
+      "WhatsApp": "sda",
+      "E-mail": "213",
+      "Observações": "123"
+    },
+    "modelo_gerado": "SENAC RJ - ACD - ACORDO:\n\nNOME: wesley\nCPF: 09198820133\nVALOR TOTAL ATUALIZADO: R$ 1234\nDESCONTO: 12% PRINCIPAL 24% JUROS 32% MULTA  \nVALOR PROPOSTO: R$ 1234\nVENCIMENTO: 29/09/2025\nENVIAR PELO WHATS/E-MAIL: sda / 213\nOBS: 123",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-054",
+    "data_criacao": "29/09/2025 07:15:02",
+    "carteira": "SENAC RJ",
+    "tipo": "ACD - PARCELADO",
+    "informacoes": {
+      "Nome do Devedor": "teste",
+      "CPF/CNPJ": "09198820133",
+      "Contrato": "213123",
+      "Valor Total Atualizado": "R$ 1234",
+      "Desconto Principal": "12%",
+      "Desconto Juros": "43%",
+      "Desconto Multa": "21%",
+      "Valor Proposto": "R$ 2356",
+      "Entrada de": "R$ 231",
+      "Quantidade de Parcelas": "2",
+      "Valor das Parcelas": "R$ 342",
+      "Data de Vencimento": "29/09/2025",
+      "WhatsApp": "1231",
+      "E-mail": "wqe",
+      "Observações": "213"
+    },
+    "modelo_gerado": "PARCELADO:\n\nNOME: teste\nCPF: 09198820133\nCONTRATO: 213123\nVALOR TOTAL ATUALIZADO: R$ 1234\nDESCONTO: 12% PRINCIPAL 43% JUROS 21% MULTA  \nVALOR PROPOSTO: R$ 2356\nENTRADA DE: R$ 231\nQUANT.P: 2\nVALOR DAS PARCELAS: R$ 342\nVENCIMENTO: 29/09/2025\nENVIAR PELO WHATS/E-MAIL: 1231 / wqe\nOBS: 213",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
   }
 ]

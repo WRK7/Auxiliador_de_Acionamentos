@@ -36,6 +36,20 @@ class FieldValidators:
             if valor_limpo:
                 return f"{valor_limpo}%"
         
+        # Inserir barras automaticamente em campos de data quando o usuário digitar apenas números (DDMMAAAA)
+        elif (campo in ["Data de Vencimento", "Vencimento Acordo", "Data de Pagamento"]
+              or FORMATACAO_AUTOMATICA.get(campo) == "data") and valor.strip():
+            # Se já está no formato correto, não alterar
+            if re.match(r'^\d{2}/\d{2}/\d{4}$', valor.strip()):
+                return valor
+            # Remover tudo que não for dígito
+            so_numeros = re.sub(r'[^0-9]', '', valor)
+            # Aplicar formatação apenas se tiver exatamente 8 dígitos
+            if len(so_numeros) == 8:
+                return f"{so_numeros[0:2]}/{so_numeros[2:4]}/{so_numeros[4:8]}"
+            # Caso contrário, retornar como está (validação tratará)
+            return valor
+
         return valor
     
     def validar_campo(self, campo, valor):

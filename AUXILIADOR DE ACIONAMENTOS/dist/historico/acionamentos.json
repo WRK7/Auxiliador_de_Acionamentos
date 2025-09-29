@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ACD-2025-001",
+    "data_criacao": "29/09/2025 09:17:41",
+    "carteira": "UNIMED",
+    "tipo": "ACD - ACORDO",
+    "informacoes": {
+      "Nome do Devedor": "we",
+      "CPF/CNPJ": "09198820133",
+      "Valor Total Atualizado": "R$ 123",
+      "Desconto Principal": "2%",
+      "Desconto Juros": "3%",
+      "Desconto Multa": "4%",
+      "Valor Proposto": "R$ 213",
+      "Data de Vencimento": "02/10/2025",
+      "Forma de Pagamento": "1",
+      "WhatsApp": "2342",
+      "E-mail": "54w",
+      "Observações": "wr"
+    },
+    "modelo_gerado": "Erro no template: campo 'Contratante' não encontrado",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
+  }
+]

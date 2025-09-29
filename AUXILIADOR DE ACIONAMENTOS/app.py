@@ -165,27 +165,31 @@ class AcionamentoApp:
             self.mostrar_instrucao_campos()
             return
         
-        if tipo_selecionado in CAMPOS_POR_TIPO:
-            # Obter campos específicos para o tipo na ordem correta
+        # Tentar chave específica da carteira primeiro: "Carteira - Tipo"
+        chave_especifica = f"{carteira} - {tipo_selecionado}" if carteira and tipo_selecionado else None
+        if chave_especifica and chave_especifica in CAMPOS_POR_TIPO:
+            campos_necessarios = CAMPOS_POR_TIPO[chave_especifica]
+        elif tipo_selecionado in CAMPOS_POR_TIPO:
             campos_necessarios = CAMPOS_POR_TIPO[tipo_selecionado]
-            
-            # Esconder todos os campos existentes
-            for widget in self.campos_container.winfo_children():
-                widget.pack_forget()
-            
-            # Mostrar apenas os campos necessários
-            for campo in campos_necessarios:
-                if campo in self.campos_entries:
-                    # Campo já existe, apenas mostrar
-                    self.campos_frames[campo].pack(fill='x', pady=2)
-                else:
-                    # Campo não existe, criar
-                    valor_inicial = self.campos_info.get(campo, "")
-                    entry, status_label = self.criar_campo_com_validacao(self.campos_container, campo, valor_inicial)
-                    self.campos_entries[campo] = entry
-                    self.campos_frames[campo].pack(fill='x', pady=2)
         else:
             self.mostrar_instrucao_campos()
+            return
+
+        # Esconder todos os campos existentes
+        for widget in self.campos_container.winfo_children():
+            widget.pack_forget()
+
+        # Mostrar apenas os campos necessários
+        for campo in campos_necessarios:
+            if campo in self.campos_entries:
+                # Campo já existe, apenas mostrar
+                self.campos_frames[campo].pack(fill='x', pady=2)
+            else:
+                # Campo não existe, criar
+                valor_inicial = self.campos_info.get(campo, "")
+                entry, status_label = self.criar_campo_com_validacao(self.campos_container, campo, valor_inicial)
+                self.campos_entries[campo] = entry
+                self.campos_frames[campo].pack(fill='x', pady=2)
     
     def atualizar_modelo_por_tipo(self, event=None):
         """Atualiza o modelo e campos quando o tipo de acionamento é alterado"""

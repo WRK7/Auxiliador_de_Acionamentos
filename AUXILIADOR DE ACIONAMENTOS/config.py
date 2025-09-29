@@ -224,6 +224,20 @@ FORMATACAO_AUTOMATICA = {
 
 # Campos específicos por tipo de acionamento
 CAMPOS_POR_TIPO = {
+    # Chave específica para UNIMED
+    "UNIMED - ACD - ACORDO": [
+        "Contratante",
+        "CPF/CNPJ",
+        "Faturas a Pagar",
+        "Títulos",
+        "Dias em Atraso",
+        "Forma de Pagamento",
+        "Data de Pagamento",
+        "Valor Original",
+        "Valor Total Atualizado",
+        "Telefone",
+        "Forma de Envio"
+    ],
     "ACD - ACORDO": [
         "Nome do Devedor",
         "CPF/CNPJ",
@@ -727,16 +741,14 @@ TELEFONE: {Telefone}
 FORMA DE ENVIO: {Forma de Envio}
 """,
     
-    "ACV - À VISTA": """
+    "CEDAE - ACV - À VISTA": """
 CEDAE - À VISTA (ACV - ACORDO À VISTA):
 
 MATRÍCULA: {Matrícula}
 GRAVAÇÃO (TELEFONE): {Gravação (Telefone)}
 VALOR ORIGINAL: {Valor Original}
 VALOR ATUALIZADO: {Valor Total Atualizado}
-DESCONTO PRINCIPAL: {Desconto Principal}
-DESCONTO JUROS: {Desconto Juros}
-DESCONTO MULTA: {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
@@ -745,16 +757,14 @@ E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
-    "ACP - PARCELADO": """
+    "CEDAE - ACP - PARCELADO": """
 CEDAE - PARCELADO (ACP - ACORDO PARCELADO):
 
 MATRÍCULA: {Matrícula}
 GRAVAÇÃO (TELEFONE): {Gravação (Telefone)}
 VALOR ORIGINAL: {Valor Original}
 VALOR ATUALIZADO: {Valor Total Atualizado}
-DESCONTO PRINCIPAL: {Desconto Principal}
-DESCONTO JUROS: {Desconto Juros}
-DESCONTO MULTA: {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO PARA PARCELAMENTO: {Valor Proposto para Parcelamento}
 ENTRADA (BOLETO): {Entrada (Boleto)}
 QTD DE PARCELAS: {Qtd de Parcelas}
@@ -778,7 +788,7 @@ TELEFONE: {Telefone}
 EMAIL: {Email}
 """,
     
-    "ACV - À VISTA": """
+    "ÁGUAS DE JOINVILLE - ACV - À VISTA": """
 ÁGUAS DE JOINVILLE - À VISTA (ACV – ACORDO À VISTA):
 
 UNIDADE: {Unidade}
@@ -787,9 +797,7 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULAR: {Titular}
 TELEFONE: {Telefone}
 VALOR DÉBITO ORIGINAL: {Valor Débito Original}
-DESCONTO PRINCIPAL: {Desconto Principal}
-DESCONTO JUROS: {Desconto Juros}
-DESCONTO MULTA: {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO DAS FATURAS: {Vencimento das Faturas}
 VENCIMENTO ACORDO: {Vencimento Acordo}
@@ -798,7 +806,7 @@ E-MAIL: {E-mail}
 OBS: {Observações}
 """,
     
-    "ACP - PARCELADO": """
+    "ÁGUAS DE JOINVILLE - ACP - PARCELADO": """
 ÁGUAS DE JOINVILLE - PARCELADO (ACP – ACORDO PARCELADO):
 
 UNIDADE: {Unidade}
@@ -807,9 +815,7 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULAR: {Titular}
 TELEFONE: {Telefone}
 VALOR DÉBITO ORIGINAL: {Valor Débito Original}
-DESCONTO PRINCIPAL: {Desconto Principal}
-DESCONTO JUROS: {Desconto Juros}
-DESCONTO MULTA: {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VALOR DE ENTRADA: {Valor de Entrada}
 QUANTIDADE DE PARCELAS: {Quantidade de Parcelas}
@@ -832,9 +838,7 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULO: {Titulo}
 VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL: {Valor Total}
-DESCONTO PRINCIPAL: {Desconto Principal}
-DESCONTO JUROS: {Desconto Juros}
-DESCONTO MULTA: {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 WHATSAPP: {WhatsApp}
@@ -850,9 +854,7 @@ CPF/CNPJ: {CPF/CNPJ}
 TITULO: {Titulo}
 VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL: {Valor Total}
-DESCONTO PRINCIPAL: {Desconto Principal}
-DESCONTO JUROS: {Desconto Juros}
-DESCONTO MULTA: {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
 ENTRADA: {Entrada}
 PARCELAS: {Parcelas}
@@ -931,7 +933,7 @@ DIAS EM ATRASO: {Dias em Atraso}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
 DATA DE PAGAMENTO: {Data de Pagamento}
 VALOR ORIGINAL: {Valor Original}
-VALOR ATUALIZADO: {Valor Atualizado}
+VALOR ATUALIZADO: {Valor Total Atualizado}
 TELEFONE: {Telefone}
 FORMA DE ENVIO: {Forma de Envio}
 """,
