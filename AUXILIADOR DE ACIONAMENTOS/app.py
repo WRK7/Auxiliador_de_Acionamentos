@@ -190,6 +190,17 @@ class AcionamentoApp:
                 entry, status_label = self.criar_campo_com_validacao(self.campos_container, campo, valor_inicial)
                 self.campos_entries[campo] = entry
                 self.campos_frames[campo].pack(fill='x', pady=2)
+
+        # Pré-preencher UNIDADE para ÁGUAS DE JOINVILLE
+        if carteira == "ÁGUAS DE JOINVILLE" and "Unidade" in self.campos_entries:
+            unidade_entry = self.campos_entries["Unidade"]
+            if not unidade_entry.get().strip():
+                unidade_entry.insert(0, "COMPANHIA ÁGUAS DE JOINVILLE EM JOINVILLE")
+                # Validar visualmente após preencher
+                for widget in self.campos_frames["Unidade"].winfo_children():
+                    if isinstance(widget, tk.Label) and widget.cget('text') in ['✓', '✗']:
+                        widget.config(text="✓", fg=DARK_THEME['success'])
+                        break
     
     def atualizar_modelo_por_tipo(self, event=None):
         """Atualiza o modelo e campos quando o tipo de acionamento é alterado"""

@@ -224,6 +224,187 @@ FORMATACAO_AUTOMATICA = {
 
 # Campos específicos por tipo de acionamento
 CAMPOS_POR_TIPO = {
+    # ===================== ESPECÍFICOS POR CARTEIRA =====================
+    # SENAC RJ - ACP - PARCELADO (usar campos de parcelamento detalhados)
+    "SENAC RJ - ACP - PARCELADO": [
+        "Nome do Devedor",
+        "CPF/CNPJ",
+        "Títulos",
+        "Valor Total Atualizado",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto",
+        "Entrada de",
+        "Quantidade de Parcelas",
+        "Valor de Cada Parcela",
+        "Data de Vencimento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+
+    # FIRJAN - ACF - À VISTA
+    "FIRJAN - ACF - À VISTA": [
+        "Unidade",
+        "Nome do Devedor",
+        "CPF/CNPJ",
+        "E-mail",
+        "Telefone",
+        "Valor Total Atualizado",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto",
+        "Forma de Pagamento",
+        "Data de Vencimento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+
+    # FIRJAN - ACF - PARCELADO (BOLETO)
+    "FIRJAN - ACF - PARCELADO": [
+        "Unidade",
+        "Nome do Devedor",
+        "CPF/CNPJ",
+        "E-mail",
+        "Telefone",
+        "Valor Total Atualizado",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Entrada de",
+        "Quantidade de Parcelas",
+        "Valor de Cada Parcela",
+        "Data de Vencimento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+
+    # FIEB - PIX/DÉBITO/CRÉDITO
+    "FIEB - ACD - PIX/DÉBITO/CRÉDITO": [
+        "Unidade",
+        "Nome do Devedor",
+        "CPF/CNPJ",
+        "Referência",
+        "Valor Original",
+        "Valor Total Atualizado",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto",
+        "Data de Vencimento",
+        "Forma de Pagamento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+
+    # FIEB - BOLETO
+    "FIEB - ACD - BOLETO": [
+        "Unidade",
+        "Nome do Devedor",
+        "CPF/CNPJ",
+        "Referência",
+        "Valor Original",
+        "Valor Total Atualizado",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto",
+        "Valor da Entrada",
+        "Quantidade de Parcelas",
+        "Valor de Cada Parcela",
+        "Data de Vencimento",
+        "Forma de Pagamento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+
+    # CEDAE - ACV/ACP/VIA
+    "CEDAE - ACV - À VISTA": [
+        "Matrícula",
+        "Gravação (Telefone)",
+        "Valor Original",
+        "Valor Total Atualizado",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto",
+        "Data de Vencimento",
+        "Forma de Pagamento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+    "CEDAE - ACP - PARCELADO": [
+        "Matrícula",
+        "Gravação (Telefone)",
+        "Valor Original",
+        "Valor Total Atualizado",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto para Parcelamento",
+        "Entrada (Boleto)",
+        "Qtd de Parcelas",
+        "Valor de Cada Parcela",
+        "Data de Vencimento",
+        "Forma de Pagamento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+    "CEDAE - VIA - SEGUNDA VIA": [
+        "Nome do Devedor",
+        "Matrícula",
+        "Fatura Vencida",
+        "Valor",
+        "Novo Vencimento",
+        "Telefone",
+        "Email"
+    ],
+    
+    # ÁGUAS DE JOINVILLE - ACV/ACP (campos já existem; UNIDADE será preenchida automaticamente pela UI)
+    "ÁGUAS DE JOINVILLE - ACV - À VISTA": [
+        "Unidade",
+        "Matrícula",
+        "CPF/CNPJ",
+        "Titular",
+        "Telefone",
+        "Valor Débito Original",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto",
+        "Vencimento das Faturas",
+        "Vencimento Acordo",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
+    "ÁGUAS DE JOINVILLE - ACP - PARCELADO": [
+        "Unidade",
+        "Matrícula",
+        "CPF/CNPJ",
+        "Titular",
+        "Telefone",
+        "Valor Débito Original",
+        "Desconto Principal",
+        "Desconto Juros",
+        "Desconto Multa",
+        "Valor Proposto",
+        "Valor de Entrada",
+        "Quantidade de Parcelas",
+        "Valor de Cada Parcela",
+        "Data de Vencimento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ],
     # Chave específica para UNIMED
     "UNIMED - ACD - ACORDO": [
         "Contratante",
@@ -573,7 +754,7 @@ ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """,
     
-    "ACP - PARCELADO": """
+    "SENAC RJ - ACP - PARCELADO": """
 SENAC RJ - PARCELADO (ACD – ACORDO PARCELADO):
 
 NOME: {Nome do Devedor}
@@ -581,7 +762,7 @@ CPF: {CPF/CNPJ}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
 DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
 VALOR PROPOSTO: {Valor Proposto}
-PARCELAMENTO: {Parcelamento} ENTRADA DE R$(DÉBITO/BOLETO) + X R$ (BOLETO/CRÉDITO)
+PARCELAMENTO: ENTRADA DE R$ {Entrada de} (DÉBITO/BOLETO) + {Quantidade de Parcelas}X R$ {Valor de Cada Parcela} (BOLETO/CRÉDITO)
 VENCIMENTO: {Data de Vencimento}
 ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
@@ -651,41 +832,39 @@ ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """,
     
-    "ACF - À VISTA": """
-FIRJAN:
-À VISTA e PARCELADO – (ACF – ACORDO FIRJAN)
+    "FIRJAN - ACF - À VISTA": """
+À VISTA – (ACF – ACORDO FIRJAN)
 
-Empresa (Sesi ou Senai): {Empresa (Sesi ou Senai)}
-CLIENTE: {Cliente}
-CPF: {CPF/CNPJ}
-TELEFONE: {Telefone}
+UNIDADE: {Unidade}
+NOME: {Nome do Devedor}
+CPF/CNPJ: {CPF/CNPJ}
 E-MAIL: {E-mail}
-TOTAL DA DÍVIDA: {Total da Dívida}
-ACORDO REALIZADO: {Acordo Realizado (100% na multa e % no juros)}
-VALOR TOTAL NEGOCIADO: {Valor Total Negociado}
-Nº DE PARCELAS NO CARTÃO DE CRÉDITO: {Nº de Parcelas no Cartão de Crédito}
-NÚMERO E VALORES DOS TÍTULOS RENEGOCIADOS (Principal): {Número e Valores dos Títulos Renegociados (Principal)}
+TELEFONE: {Telefone}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+VALOR PROPOSTO: R$ {Valor Proposto}
+FORMA DE PAGAMENTO: {Forma de Pagamento} (Pix, deposito em conta corrente, Nº de Parcelas no cartão de crédito: 3X)
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {WhatsApp} {E-mail}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """,
     
-    "ACF - PARCELADO": """
-FIRJAN:
-À VISTA e PARCELADO – (ACF – ACORDO FIRJAN)
+    "FIRJAN - ACF - PARCELADO": """
+BOLETO – (ACF – ACORDO FIRJAN)
 
-Empresa (Sesi ou Senai): {Empresa (Sesi ou Senai)}
-CLIENTE: {Cliente}
-CPF: {CPF/CNPJ}
-TELEFONE: {Telefone}
+UNIDADE: {Unidade}
+NOME: {Nome do Devedor}
+CPF/CNPJ: {CPF/CNPJ}
 E-MAIL: {E-mail}
-TOTAL DA DÍVIDA: {Total da Dívida}
-ACORDO REALIZADO: {Acordo Realizado (100% na multa e % no juros)}
-VALOR TOTAL NEGOCIADO: {Valor Total Negociado}
-Nº DE PARCELAS NO CARTÃO DE CRÉDITO: {Nº de Parcelas no Cartão de Crédito}
-NÚMERO E VALORES DOS TÍTULOS RENEGOCIADOS (Principal): {Número e Valores dos Títulos Renegociados (Principal)}
+TELEFONE: {Telefone}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+ENTRADA: R$ {Entrada de}
+QUANTIDA DE PARCELAS: {Quantidade de Parcelas}
+VALOR DE CADA PARCELA: R$ {Valor de Cada Parcela}
+FORMA DE PAGAMENTO: BOLETO
 VENCIMENTO: {Data de Vencimento}
-ENVIAR PELO WHATS/E-MAIL: {WhatsApp} {E-mail}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """,
     
@@ -939,12 +1118,15 @@ FORMA DE ENVIO: {Forma de Envio}
 """,
     
     "FIEB - ACD - PIX/DÉBITO/CRÉDITO": """
-FIEB: PIX, DÉBITO OU CRÉDITO EM 12X (ACD – ACORDO):
+PIX, DÉBITO OU CRÉDITO EM 12X (ACD – ACORDO):
 
+UNIDADE: {Unidade}
 NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
+REFERENCIA: {Referência}
+VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa} CONFORME NORMATIVA DO SENAI
 VALOR PROPOSTO: {Valor Proposto}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
@@ -953,13 +1135,19 @@ OBS: {Observações}
 """,
     
     "FIEB - ACD - BOLETO": """
-FIEB: BOLETO (ACD – ACORDO):
+BOLETO (ACD – ACORDO):
 
+UNIDADE: {Unidade}
 NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
+REFERENCIA: {Referência}
+VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa}
+DESCONTO: {Desconto Principal} {Desconto Juros} {Desconto Multa} CONFORME NORMATIVA
 VALOR PROPOSTO: {Valor Proposto}
+VALOR DA ENTRADA: {Valor da Entrada}
+QUANTIDADE DE PARCELAS: {Quantidade de Parcelas}
+VALOR DE CADA PARCELA: {Valor de Cada Parcela}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: BOLETO
 ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}

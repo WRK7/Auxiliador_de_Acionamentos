@@ -198,9 +198,8 @@ Data: {data_atual}
         return campo in campos_porcentagem
     
     def _eh_campo_obrigatorio(self, campo):
-        """Verifica se o campo é obrigatório (todos exceto WhatsApp, E-mail e Observações)"""
-        campos_opcionais = ["WhatsApp", "E-mail", "Observações"]
-        return campo not in campos_opcionais
+        """Campo é obrigatório se estiver configurado em CAMPOS_OBRIGATORIOS."""
+        return campo in CAMPOS_OBRIGATORIOS
     
     def _formatar_descontos_linha_unica(self, informacoes):
         """Formata os descontos em uma linha única: '34% PRINCIPAL 100% JUROS 23% MULTA'"""
