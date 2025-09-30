@@ -317,7 +317,27 @@ class AcionamentoApp:
             entry.bind('<FocusIn>', on_focus_in)
             entry.bind('<FocusOut>', on_focus_out)
         else:
-            entry.insert(0, valor)
+            # Placeholders contextuais para FIRJAN
+            carteira_atual = self.carteira_var.get()
+            tipo_atual = self.tipo_var.get()
+            if carteira_atual == 'FIRJAN' and tipo_atual == 'ACF - À VISTA' and campo in ['Valor Total Atualizado', 'Forma de Pagamento']:
+                if campo == 'Valor Total Atualizado':
+                    entry.insert(0, '(se encontra no campo como valor ORIGINAL)')
+                elif campo == 'Forma de Pagamento':
+                    entry.insert(0, '(Pix, deposito em conta corrente, Nº de Parcelas no cartão de crédito: 3X)')
+                entry.config(fg=DARK_THEME['text_muted'])
+                def on_focus_in_generic(event, default_text=entry.get()):
+                    if entry.get() == default_text:
+                        entry.delete(0, tk.END)
+                        entry.config(fg=DARK_THEME['text_primary'])
+                def on_focus_out_generic(event, default_text=entry.get()):
+                    if not entry.get().strip():
+                        entry.insert(0, default_text)
+                        entry.config(fg=DARK_THEME['text_muted'])
+                entry.bind('<FocusIn>', on_focus_in_generic)
+                entry.bind('<FocusOut>', on_focus_out_generic)
+            else:
+                entry.insert(0, valor)
         
         # Label de status da validação
         status_label = tk.Label(row_frame, text="", width=3, 
