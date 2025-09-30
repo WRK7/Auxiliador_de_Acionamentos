@@ -4,8 +4,8 @@
 CARTEIRAS = [
     "SENAC RJ"
 ]
-if "SENAC BA/RJ" not in CARTEIRAS:
-    CARTEIRAS.append("SENAC BA/RJ")
+if "SENAC MS/BA" not in CARTEIRAS:
+    CARTEIRAS.append("SENAC MS/BA")
 
 # Tipos de acionamento disponíveis (globais)
 TIPOS_ACIONAMENTO = [
@@ -51,13 +51,13 @@ CAMPOS_OBRIGATORIOS = [
 # Prazo máximo por carteira (dias)
 PRAZO_MAXIMO_POR_CARTEIRA = {
     "SENAC RJ": 7,
-    "SENAC BA/RJ": 7
+    "SENAC MS/BA": 7
 }
 
 # Tipos por carteira
 TIPOS_POR_CARTEIRA = {
     "SENAC RJ": ["ACD - ACORDO", "ACD - ACORDO PARCELADO"],
-    "SENAC BA/RJ": ["ACD - ACORDO", "ACD - ACORDO PARCELADO"]
+    "SENAC MS/BA": ["ACD - ACORDO", "ACD - ACORDO PARCELADO"]
 }
 
 # Formatação automática por campo
@@ -138,7 +138,7 @@ ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """
     ,
-    "SENAC BA/RJ - ACD - ACORDO": """
+    "SENAC MS/BA - ACD - ACORDO": """
 NOME: {Nome do Devedor}
 CPF: {CPF/CNPJ}
 CRE/CONTRATO: {CRE/Contrato}

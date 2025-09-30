@@ -1034,5 +1034,53 @@
     "usuario": "wesley.cruz",
     "computador": "PCportesconx",
     "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-030",
+    "data_criacao": "30/09/2025 11:50:24",
+    "carteira": "SENAC BA/RJ",
+    "tipo": "ACD - ACORDO PARCELADO",
+    "informacoes": {},
+    "modelo_gerado": "=== ACIONAMENTO - ACD - ACORDO PARCELADO ===\nCarteira: SENAC BA/RJ\nData: 30/09/2025",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-031",
+    "data_criacao": "30/09/2025 11:51:10",
+    "carteira": "SENAC BA/RJ",
+    "tipo": "ACD - ACORDO",
+    "informacoes": {
+      "Nome do Devedor": "qweqweqe",
+      "CPF/CNPJ": "09198820133",
+      "CRE/Contrato": "21313",
+      "Valor Total Atualizado": "R$ 342234",
+      "Desconto Principal": "32%",
+      "Desconto Juros": "4%",
+      "Desconto Multa": "2%",
+      "Valor Proposto": "R$ 23121",
+      "Data de Vencimento": "02/10/2025",
+      "Valor Confirmado": "R$ 324",
+      "Horário da Ligação": "4324",
+      "WhatsApp": "523",
+      "E-mail": "32423",
+      "Observações": "6436"
+    },
+    "modelo_gerado": "NOME: qweqweqe\nCPF: 09198820133\nCRE/CONTRATO: 21313\nVALOR TOTAL ATUALIZADO: R$ 342234\nDESCONTO: 32% PRINCIPAL 4% JUROS 2% MULTA  \nVALOR PROPOSTO:R$ 23121\nVENCIMENTO: 02/10/2025\nVALOR CONFIRMADO: R$ 324 SIG/planilha.\nHORÁRIO DA LIGAÇÃO: 4324\nENVIAR PELO WHATS/E-MAIL: 523 / 32423\nOBS: 6436",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-032",
+    "data_criacao": "30/09/2025 11:52:10",
+    "carteira": "SENAC BA/RJ",
+    "tipo": "ACD - ACORDO PARCELADO",
+    "informacoes": {},
+    "modelo_gerado": "=== ACIONAMENTO - ACD - ACORDO PARCELADO ===\nCarteira: SENAC BA/RJ\nData: 30/09/2025",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
   }
 ]
