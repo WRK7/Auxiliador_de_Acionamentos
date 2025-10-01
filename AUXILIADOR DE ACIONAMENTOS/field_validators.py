@@ -67,10 +67,14 @@ class FieldValidators:
             elif len(numeros) == 14:
                 return Validator.validar_cnpj(valor)
             return False  # Tamanho inválido
-        elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
+        elif campo in ["Data de Vencimento", "Vencimento Acordo", "Data de Pagamento"]:
             if not valor.strip():
                 return True  # Campo vazio é válido (não obrigatório)
             return self._validar_data_vencimento(valor)
+        elif campo == "Novo Vencimento":
+            if not valor.strip():
+                return True  # Campo vazio é válido (não obrigatório)
+            return self._validar_data_futura(valor)
         elif self._eh_campo_porcentagem(campo):
             if not valor.strip():
                 return True  # Campo vazio é válido (não obrigatório)
@@ -95,10 +99,14 @@ class FieldValidators:
                 return (valido, "CNPJ válido" if valido else "CNPJ inválido")
             else:
                 return False, f"Documento deve ter 11 (CPF) ou 14 (CNPJ) dígitos. Atual: {len(numeros)}"
-        elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
+        elif campo in ["Data de Vencimento", "Vencimento Acordo", "Data de Pagamento"]:
             if not valor.strip():
                 return True, "Campo vazio"
             return self._validar_data_vencimento_com_mensagem(valor)
+        elif campo == "Novo Vencimento":
+            if not valor.strip():
+                return True, "Campo vazio"
+            return self._validar_data_futura_com_mensagem(valor)
         elif self._eh_campo_porcentagem(campo):
             if not valor.strip():
                 return True, "Campo vazio"
@@ -266,7 +274,7 @@ class FieldValidators:
         return True, "Porcentagem válida"
     
     def _validar_data_vencimento(self, valor):
-        """Valida data de vencimento: DD/MM/AAAA, de hoje até +7 dias"""
+        """Valida data de vencimento: DD/MM/AAAA, de hoje até +prazo da carteira"""
         from datetime import datetime, timedelta
         
         # Verificar formato DD/MM/AAAA
@@ -277,15 +285,36 @@ class FieldValidators:
             # Converter para datetime
             data_vencimento = datetime.strptime(valor, '%d/%m/%Y')
             hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-            data_maxima = hoje + timedelta(days=7)
+            # Pega prazo por carteira (default 7)
+            carteira_atual = self.carteira_var.get() if hasattr(self, 'carteira_var') else None
+            prazo_max = PRAZO_MAXIMO_POR_CARTEIRA.get(carteira_atual, 7)
+            data_maxima = hoje + timedelta(days=prazo_max)
             
             # Verificar se está no período permitido
             return hoje <= data_vencimento <= data_maxima
         except ValueError:
             return False
     
+    def _validar_data_futura(self, valor):
+        """Valida data futura: DD/MM/AAAA, de hoje em diante (sem limite máximo)"""
+        from datetime import datetime
+        
+        # Verificar formato DD/MM/AAAA
+        if not re.match(r'^\d{2}/\d{2}/\d{4}$', valor):
+            return False
+        
+        try:
+            # Converter para datetime
+            data_informada = datetime.strptime(valor, '%d/%m/%Y')
+            hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            
+            # Verificar se a data é de hoje em diante
+            return data_informada >= hoje
+        except ValueError:
+            return False
+    
     def _validar_data_vencimento_com_mensagem(self, valor):
-        """Valida data de vencimento e retorna (valido, mensagem)"""
+        """Valida data de vencimento e retorna (valido, mensagem) usando prazo por carteira"""
         from datetime import datetime, timedelta
         
         if not valor.strip():
@@ -298,12 +327,36 @@ class FieldValidators:
         try:
             data_vencimento = datetime.strptime(valor, '%d/%m/%Y')
             hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-            data_maxima = hoje + timedelta(days=7)
+            carteira_atual = self.carteira_var.get() if hasattr(self, 'carteira_var') else None
+            prazo_max = PRAZO_MAXIMO_POR_CARTEIRA.get(carteira_atual, 7)
+            data_maxima = hoje + timedelta(days=prazo_max)
             
             if data_vencimento < hoje:
                 return False, f"Data não pode ser anterior a hoje ({hoje.strftime('%d/%m/%Y')})"
             elif data_vencimento > data_maxima:
-                return False, f"Data não pode ser posterior a {data_maxima.strftime('%d/%m/%Y')} (máximo 7 dias)"
+                return False, f"Data não pode ser posterior a {data_maxima.strftime('%d/%m/%Y')} (máximo {prazo_max} dias)"
+            else:
+                return True, "Data válida"
+        except ValueError:
+            return False, "Data inválida"
+    
+    def _validar_data_futura_com_mensagem(self, valor):
+        """Valida data futura (sem limite máximo) e retorna (valido, mensagem)"""
+        from datetime import datetime
+        
+        if not valor.strip():
+            return True, "Campo vazio"
+        
+        # Verificar formato
+        if not re.match(r'^\d{2}/\d{2}/\d{4}$', valor):
+            return False, "Formato inválido (DD/MM/AAAA)"
+        
+        try:
+            data_informada = datetime.strptime(valor, '%d/%m/%Y')
+            hoje = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            
+            if data_informada < hoje:
+                return False, f"Data não pode ser anterior a hoje ({hoje.strftime('%d/%m/%Y')})"
             else:
                 return True, "Data válida"
         except ValueError:

@@ -294,7 +294,7 @@ class AcionamentoApp:
             self.prazo_label.pack(side='left', padx=(5, 0))
         
         # Adicionar placeholder para campos de data
-        if campo in ["Data de Vencimento", "Data de Pagamento"]:
+        if campo in ["Data de Vencimento", "Data de Pagamento", "Fatura Vencida", "Novo Vencimento"]:
             if campo == "Data de Vencimento":
                 placeholder_text = "Ex: 26/09/2025"
             else:
@@ -317,10 +317,26 @@ class AcionamentoApp:
             entry.bind('<FocusIn>', on_focus_in)
             entry.bind('<FocusOut>', on_focus_out)
         else:
-            # Placeholders contextuais para FIRJAN
+            # Placeholders contextuais
             carteira_atual = self.carteira_var.get()
             tipo_atual = self.tipo_var.get()
-            if carteira_atual == 'FIRJAN' and tipo_atual == 'ACF - À VISTA' and campo in ['Valor Total Atualizado', 'Forma de Pagamento']:
+            
+            # Placeholder para CEDAE ACP
+            if carteira_atual == 'CEDAE' and 'ACP' in tipo_atual and campo == 'Forma de Pagamento':
+                entry.insert(0, 'CARTÃO DE CRÉDITO OU BOLETO')
+                entry.config(fg=DARK_THEME['text_muted'])
+                def on_focus_in_generic(event, default_text=entry.get()):
+                    if entry.get() == default_text:
+                        entry.delete(0, tk.END)
+                        entry.config(fg=DARK_THEME['text_primary'])
+                def on_focus_out_generic(event, default_text=entry.get()):
+                    if not entry.get().strip():
+                        entry.insert(0, default_text)
+                        entry.config(fg=DARK_THEME['text_muted'])
+                entry.bind('<FocusIn>', on_focus_in_generic)
+                entry.bind('<FocusOut>', on_focus_out_generic)
+            # Placeholder para FIRJAN
+            elif carteira_atual == 'FIRJAN' and tipo_atual == 'ACF - À VISTA' and campo in ['Valor Total Atualizado', 'Forma de Pagamento']:
                 if campo == 'Valor Total Atualizado':
                     entry.insert(0, '(se encontra no campo como valor ORIGINAL)')
                 elif campo == 'Forma de Pagamento':
@@ -351,14 +367,20 @@ class AcionamentoApp:
             # Ignorar placeholder na validação
             if campo in ["Data de Vencimento", "Data de Pagamento"] and valor_atual == "DD/MM/AAAA":
                 status_label.config(text="", fg=DARK_THEME['text_primary'])
-                entry.config(bg=DARK_THEME['surface'], fg=DARK_THEME['text_primary'])
+                entry.config(bg=DARK_THEME['surface'], fg=DARK_THEME['text_primary'],
+                            highlightthickness=1,
+                            highlightcolor=DARK_THEME['accent'],
+                            highlightbackground=DARK_THEME['accent'])
                 label.config(fg=DARK_THEME['text_primary'])
                 return
             
             # Resetar cor de fundo se campo estiver vazio
             if not valor_atual.strip():
                 status_label.config(text="", fg=DARK_THEME['text_primary'])
-                entry.config(bg=DARK_THEME['surface'], fg=DARK_THEME['text_primary'])
+                entry.config(bg=DARK_THEME['surface'], fg=DARK_THEME['text_primary'],
+                            highlightthickness=1,
+                            highlightcolor=DARK_THEME['accent'],
+                            highlightbackground=DARK_THEME['accent'])
                 label.config(fg=DARK_THEME['text_primary'])
                 return
             
@@ -367,15 +389,13 @@ class AcionamentoApp:
             
             if valido:
                 status_label.config(text="✓", fg='#00FF00', font=('Segoe UI', 10, 'bold'))
-                # Manter cores específicas do campo mas com borda de sucesso
-                entry.config(highlightcolor='#00FF00', highlightthickness=2)
-                # Tooltip com mensagem de sucesso
+                entry.config(highlightcolor='#00FF00', highlightbackground='#00FF00', highlightthickness=2)
+                label.config(fg=DARK_THEME['text_primary'])
                 UIComponents.create_tooltip(status_label, mensagem)
             else:
                 status_label.config(text="✗", fg='#FF0000', font=('Segoe UI', 10, 'bold'))
-                # Manter cores específicas do campo mas com borda de erro
-                entry.config(highlightcolor='#FF0000', highlightthickness=2)
-                # Tooltip com mensagem de erro
+                entry.config(highlightcolor='#FF0000', highlightbackground='#FF0000', highlightthickness=2)
+                label.config(fg=DARK_THEME['danger'])
                 UIComponents.create_tooltip(status_label, mensagem)
         
         # Função para aplicar formatação apenas no FocusOut

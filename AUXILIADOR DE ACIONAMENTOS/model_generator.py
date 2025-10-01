@@ -29,19 +29,21 @@ class ModelGenerator:
             valor = entry.get().strip()
             
             # Ignorar placeholder na coleta de dados
-            if campo in ["Data de Vencimento", "Vencimento Acordo"] and valor in ["DD/MM/AAAA", "Ex: 26/09/2025"]:
+            if campo in ["Data de Vencimento", "Vencimento Acordo", "Data de Pagamento", "Fatura Vencida", "Novo Vencimento"] and valor in ["DD/MM/AAAA", "Ex: 26/09/2025"]:
                 valor = ""
             
             informacoes[campo] = valor
             
-            # Validar CPF/CNPJ, Data de Vencimento e Porcentagens - bloquear se inválidos
-            if campo in ["CPF/CNPJ", "Data de Vencimento", "Vencimento Acordo"] and valor:
+            # Validar CPF/CNPJ, Data de Vencimento, Data de Pagamento, Novo Vencimento e Porcentagens - bloquear se inválidos
+            if campo in ["CPF/CNPJ", "Data de Vencimento", "Vencimento Acordo", "Data de Pagamento", "Novo Vencimento"] and valor:
                 if not self._validar_campo_basico(campo, valor, carteira_var):
                     if campo == "CPF/CNPJ":
                         tipo_doc = Validator.obter_tipo_documento(valor)
                         campos_invalidos.append(f"{campo} ({tipo_doc} inválido)")
-                    elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
+                    elif campo in ["Data de Vencimento", "Vencimento Acordo", "Data de Pagamento"]:
                         campos_invalidos.append(f"{campo} (data inválida ou fora do prazo)")
+                    elif campo == "Novo Vencimento":
+                        campos_invalidos.append(f"{campo} (data inválida ou anterior à data atual)")
             
             # Validar campos de porcentagem
             if self._eh_campo_porcentagem(campo) and valor:
@@ -81,13 +83,16 @@ class ModelGenerator:
             elif len(numeros) == 14:
                 return Validator.validar_cnpj(valor)
             return False
-        elif campo in ["Data de Vencimento", "Vencimento Acordo"]:
+        elif campo in ["Data de Vencimento", "Vencimento Acordo", "Data de Pagamento"]:
             carteira_atual = carteira_var.get()
             if carteira_atual:
                 valido, mensagem = Validator.validar_data_vencimento(valor, carteira_atual, PRAZO_MAXIMO_POR_CARTEIRA)
                 return valido
             else:
                 return Validator.validar_data(valor)
+        elif campo == "Novo Vencimento":
+            valido, mensagem = Validator.validar_data_futura(valor)
+            return valido
         elif campo in CAMPOS_OBRIGATORIOS:
             return len(valor.strip()) > 0
         

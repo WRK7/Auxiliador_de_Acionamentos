@@ -171,6 +171,27 @@ class Validator:
             return False, f"Erro na validação: {str(e)}"
     
     @staticmethod
+    def validar_data_futura(data_str):
+        """Valida se a data é de hoje em diante (sem limite máximo)"""
+        try:
+            # Primeiro validar formato básico
+            if not Validator.validar_data(data_str):
+                return False, "Formato de data inválido (DD/MM/AAAA)"
+            
+            # Converter para datetime
+            data_informada = datetime.strptime(data_str, '%d/%m/%Y')
+            data_atual = datetime.now().date()  # Apenas a data, sem hora
+            
+            # Verificar se a data é no futuro (incluindo hoje)
+            if data_informada.date() < data_atual:
+                return False, "Data não pode ser anterior à data atual"
+            
+            return True, "Data válida"
+            
+        except Exception as e:
+            return False, f"Erro na validação: {str(e)}"
+    
+    @staticmethod
     def formatar_data(texto):
         """Formata data automaticamente"""
         # Remove caracteres não numéricos
