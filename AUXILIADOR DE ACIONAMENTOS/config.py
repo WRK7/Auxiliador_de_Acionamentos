@@ -16,6 +16,8 @@ if "UNIMED" not in CARTEIRAS:
     CARTEIRAS.append("UNIMED")
 if "FIRJAN" not in CARTEIRAS:
     CARTEIRAS.append("FIRJAN")
+if "FIEB" not in CARTEIRAS:
+    CARTEIRAS.append("FIEB")
 
 # Tipos de acionamento disponíveis (globais)
 TIPOS_ACIONAMENTO = [
@@ -27,7 +29,9 @@ TIPOS_ACIONAMENTO = [
     "ACC - A VISTA",
     "ACC - PARCELADO",
     "ACF - A VISTA",
-    "ACF - BOLETO"
+    "ACF - BOLETO",
+    "ACD - A VISTA",
+    "ACD - BOLETO"
 ]
 
 # Campos de informação (somente os usados nesta carteira/tipo)
@@ -70,6 +74,8 @@ CAMPOS_INFO = {
     "Quantidade de Parcelas": "",
     "Valor das Parcelas": "",
     "Valor de Cada Parcela": "",
+    "Referência": "",
+    "Desconto Livre": "",
     "Novo Vencimento": "",
     "Data de Vencimento": "",
     "WhatsApp": "",
@@ -124,7 +130,8 @@ PRAZO_MAXIMO_POR_CARTEIRA = {
     "CEDAE": 7,
     "CASSEMS": 7,
     "UNIMED": 2,
-    "FIRJAN": 7
+    "FIRJAN": 7,
+    "FIEB": 7
 }
 
 # Tipos por carteira
@@ -135,7 +142,8 @@ TIPOS_POR_CARTEIRA = {
     "SESC": ["ACD - ACORDO", "ACD - PARCELADO"],
     "CASSEMS": ["ACC - A VISTA", "ACC - PARCELADO"],
     "UNIMED": ["ACD - ACORDO"],
-    "FIRJAN": ["ACF - A VISTA", "ACF - BOLETO"]
+    "FIRJAN": ["ACF - A VISTA", "ACF - BOLETO"],
+    "FIEB": ["ACD - A VISTA", "ACD - BOLETO"]
 }
 
 # Formatação automática por campo
@@ -158,6 +166,7 @@ FORMATACAO_AUTOMATICA = {
     "Entrada de": "moeda",
     "Valor das Parcelas": "moeda",
     "Valor de Cada Parcela": "moeda",
+    "Referência": "data",
     "Desconto Principal": "porcentagem",
     "Desconto Juros": "porcentagem",
     "Desconto Multa": "porcentagem",
@@ -366,6 +375,22 @@ CAMPOS_POR_TIPO = {
         "Observações"
     ]
     ,
+    "FIEB - ACD - A VISTA": [
+        "Unidade",
+        "Nome do Devedor",
+        "CPF/CNPJ",
+        "Referência",
+        "Valor Original",
+        "Valor Total Atualizado",
+        "Desconto Livre",
+        "Valor Proposto",
+        "Data de Vencimento",
+        "Forma de Pagamento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ]
+    ,
     "UNIMED - ACD - ACORDO": [
         "Contratante",
         "CPF/CNPJ",
@@ -542,6 +567,21 @@ QUANTIDA DE PARCELAS: {Quantidade de Parcelas}
 VALOR DE CADA PARCELA: {Valor de Cada Parcela}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
 VENCIMENTO: {Data de Vencimento}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
+OBS: {Observações}
+"""
+    ,
+    "FIEB - ACD - A VISTA": """
+UNIDADE: {Unidade}
+NOME: {Nome do Devedor}
+CPF: {CPF/CNPJ}
+REFERENCIA: {Referência}
+VALOR ORIGINAL: {Valor Original}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto Livre}
+VALOR PROPOSTO: {Valor Proposto}
+VENCIMENTO: {Data de Vencimento}
+FORMA DE PAGAMENTO: {Forma de Pagamento}
 ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
 OBS: {Observações}
 """
