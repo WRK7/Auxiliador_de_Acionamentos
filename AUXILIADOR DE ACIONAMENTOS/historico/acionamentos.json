@@ -1377,5 +1377,66 @@
     "usuario": "wesley.cruz",
     "computador": "PCportesconx",
     "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-038",
+    "data_criacao": "02/10/2025 08:29:48",
+    "carteira": "FIEB",
+    "tipo": "ACD - A VISTA",
+    "informacoes": {
+      "Unidade": "sesi",
+      "Nome do Devedor": "wesley",
+      "CPF/CNPJ": "09198820133",
+      "Referência": "233/06/2025",
+      "Valor Original": "R$ 34,55",
+      "Valor Total Atualizado": "R$ 21,33",
+      "Desconto Livre": "DESCONTO DE 20%",
+      "Valor Proposto": "R$ 23,99",
+      "Data de Vencimento": "05/10/2025",
+      "Forma de Pagamento": "BOLETO",
+      "WhatsApp": "67993228161",
+      "E-mail": "E-MAIL.",
+      "Observações": "23132"
+    },
+    "modelo_gerado": "UNIDADE: sesi\nNOME: wesley\nCPF: 09198820133\nREFERENCIA: 233/06/2025\nVALOR ORIGINAL: R$ 34,55\nVALOR TOTAL ATUALIZADO: R$ 21,33\nDESCONTO: DESCONTO DE 20%\nVALOR PROPOSTO: R$ 23,99\nVENCIMENTO: 05/10/2025\nFORMA DE PAGAMENTO: BOLETO\nENVIAR PELO WHATS/E-MAIL: 67993228161 / E-MAIL.\nOBS: 23132",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-039",
+    "data_criacao": "02/10/2025 08:30:35",
+    "carteira": "FIEB",
+    "tipo": "ACD - A VISTA",
+    "informacoes": {
+      "Unidade": "sesi",
+      "Nome do Devedor": "wesley",
+      "CPF/CNPJ": "09198820133",
+      "Referência": "233/666/2025",
+      "Valor Original": "R$ 34,55",
+      "Valor Total Atualizado": "R$ 21,33",
+      "Desconto Livre": "DESCONTO DE 20%",
+      "Valor Proposto": "R$ 23,99",
+      "Data de Vencimento": "05/10/2025",
+      "Forma de Pagamento": "BOLETO",
+      "WhatsApp": "67993228161",
+      "E-mail": "E-MAIL.",
+      "Observações": "23132"
+    },
+    "modelo_gerado": "UNIDADE: sesi\nNOME: wesley\nCPF: 09198820133\nREFERENCIA: 233/666/2025\nVALOR ORIGINAL: R$ 34,55\nVALOR TOTAL ATUALIZADO: R$ 21,33\nDESCONTO: DESCONTO DE 20%\nVALOR PROPOSTO: R$ 23,99\nVENCIMENTO: 05/10/2025\nFORMA DE PAGAMENTO: BOLETO\nENVIAR PELO WHATS/E-MAIL: 67993228161 / E-MAIL.\nOBS: 23132",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
+  },
+  {
+    "id": "ACD-2025-040",
+    "data_criacao": "02/10/2025 08:40:40",
+    "carteira": "FIEB",
+    "tipo": "ACD - BOLETO",
+    "informacoes": {},
+    "modelo_gerado": "=== ACIONAMENTO - ACD - BOLETO ===\nCarteira: FIEB\nData: 02/10/2025",
+    "usuario": "wesley.cruz",
+    "computador": "PCportesconx",
+    "ip": "10.100.20.137"
   }
 ]

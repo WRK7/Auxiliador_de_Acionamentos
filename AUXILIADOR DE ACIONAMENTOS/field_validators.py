@@ -27,6 +27,10 @@ class FieldValidators:
                 return f"R$ {valor_limpo}"
         
         elif self._eh_campo_porcentagem(campo) and valor.strip():
+            # Campo "Desconto" para FIEB não tem formatação automática
+            if campo == "Desconto":
+                return valor  # Mantém como está (livre)
+            
             # Se já tem %, não formata novamente
             if valor.strip().endswith('%'):
                 return valor
@@ -71,6 +75,10 @@ class FieldValidators:
             if not valor.strip():
                 return True  # Campo vazio é válido (não obrigatório)
             return self._validar_data_vencimento(valor)
+        elif campo == "Referência":
+            if not valor.strip():
+                return True  # Campo vazio é válido (não obrigatório)
+            return self._validar_data_livre(valor)
         elif campo == "Novo Vencimento":
             if not valor.strip():
                 return True  # Campo vazio é válido (não obrigatório)
@@ -103,6 +111,10 @@ class FieldValidators:
             if not valor.strip():
                 return True, "Campo vazio"
             return self._validar_data_vencimento_com_mensagem(valor)
+        elif campo == "Referência":
+            if not valor.strip():
+                return True, "Campo vazio"
+            return self._validar_data_livre_com_mensagem(valor)
         elif campo == "Novo Vencimento":
             if not valor.strip():
                 return True, "Campo vazio"
@@ -359,6 +371,37 @@ class FieldValidators:
                 return False, f"Data não pode ser anterior a hoje ({hoje.strftime('%d/%m/%Y')})"
             else:
                 return True, "Data válida"
+        except ValueError:
+            return False, "Data inválida"
+    
+    def _validar_data_livre(self, valor):
+        """Valida data livre (qualquer data válida DD/MM/AAAA)"""
+        from datetime import datetime
+        
+        # Verificar formato
+        if not re.match(r'^\d{2}/\d{2}/\d{4}$', valor):
+            return False
+        
+        try:
+            datetime.strptime(valor, '%d/%m/%Y')
+            return True
+        except ValueError:
+            return False
+    
+    def _validar_data_livre_com_mensagem(self, valor):
+        """Valida data livre e retorna (valido, mensagem)"""
+        from datetime import datetime
+        
+        if not valor.strip():
+            return True, "Campo vazio"
+        
+        # Verificar formato
+        if not re.match(r'^\d{2}/\d{2}/\d{4}$', valor):
+            return False, "Formato inválido (DD/MM/AAAA)"
+        
+        try:
+            datetime.strptime(valor, '%d/%m/%Y')
+            return True, "Data válida"
         except ValueError:
             return False, "Data inválida"
     

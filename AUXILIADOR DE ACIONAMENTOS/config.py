@@ -60,6 +60,7 @@ CAMPOS_INFO = {
     "Valor da Parcela": "",
     "Valor Atualizado": "",
     "Valor Total Atualizado": "",
+    "Valor da Entrada": "",
     "Desconto Principal": "",
     "Desconto Juros": "",
     "Desconto Multa": "",
@@ -164,6 +165,7 @@ FORMATACAO_AUTOMATICA = {
     "Valor Confirmado": "moeda",
     "Entrada (Boleto)": "moeda",
     "Entrada de": "moeda",
+    "Valor da Entrada": "moeda",
     "Valor das Parcelas": "moeda",
     "Valor de Cada Parcela": "moeda",
     "Referência": "data",
@@ -382,8 +384,27 @@ CAMPOS_POR_TIPO = {
         "Referência",
         "Valor Original",
         "Valor Total Atualizado",
-        "Desconto Livre",
+        "Desconto",
         "Valor Proposto",
+        "Data de Vencimento",
+        "Forma de Pagamento",
+        "WhatsApp",
+        "E-mail",
+        "Observações"
+    ]
+    ,
+    "FIEB - ACD - BOLETO": [
+        "Unidade",
+        "Nome do Devedor",
+        "CPF/CNPJ",
+        "Referência",
+        "Valor Original",
+        "Valor Total Atualizado",
+        "Desconto",
+        "Valor Proposto",
+        "Valor da Entrada",
+        "Quantidade de Parcelas",
+        "Valor de Cada Parcela",
         "Data de Vencimento",
         "Forma de Pagamento",
         "WhatsApp",
@@ -578,8 +599,26 @@ CPF: {CPF/CNPJ}
 REFERENCIA: {Referência}
 VALOR ORIGINAL: {Valor Original}
 VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
-DESCONTO: {Desconto Livre}
+DESCONTO: {Desconto}
 VALOR PROPOSTO: {Valor Proposto}
+VENCIMENTO: {Data de Vencimento}
+FORMA DE PAGAMENTO: {Forma de Pagamento}
+ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
+OBS: {Observações}
+"""
+    ,
+    "FIEB - ACD - BOLETO": """
+UNIDADE: {Unidade}
+NOME: {Nome do Devedor}
+CPF: {CPF/CNPJ}
+REFERENCIA: {Referência}
+VALOR ORIGINAL: {Valor Original}
+VALOR TOTAL ATUALIZADO: {Valor Total Atualizado}
+DESCONTO: {Desconto}
+VALOR PROPOSTO: {Valor Proposto}
+VALOR DA ENTRADA: {Valor da Entrada}
+QUANTIDADE DE PARCELAS: {Quantidade de Parcelas}
+VALOR DE CADA PARCELA: {Valor de Cada Parcela}
 VENCIMENTO: {Data de Vencimento}
 FORMA DE PAGAMENTO: {Forma de Pagamento}
 ENVIAR PELO WHATS/E-MAIL: {WhatsApp} / {E-mail}
